@@ -30,11 +30,14 @@ def checkMNISTdata(x_train, y_train, x_test, y_test):
     print(f"x_test shape: {x_test.shape}")
     print(f"y_train shape: {y_test.shape}")
 def imageNormalization(x_train, x_test):
+
+    # x_train = tf.keras.utils.normalize(x_train, axis = 1)
+    # x_test = tf.keras.utils.normalize(x_test, axis = 1)
+    _,x_train = cv2.threshold(x_train,127,255,cv2.THRESH_BINARY)
+    _,x_test = cv2.threshold(x_test,127,255,cv2.THRESH_BINARY)
     # reshape the input image to 28x28, channel=1
     x_train = np.array(x_train).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
     x_test = np.array(x_test).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
-    x_train = tf.keras.utils.normalize(x_train, axis = 1)
-    x_test = tf.keras.utils.normalize(x_test, axis = 1)
     return x_train, x_test
 
 # ===================== image processing ===================== #

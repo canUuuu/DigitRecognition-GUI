@@ -9,6 +9,7 @@ mnist = tf.keras.datasets.mnist
 # normalization to [0-1]
 x_train , x_test = imageNormalization(x_train, x_test)
 
+
 checkMNISTdata(x_train, y_train, x_test, y_test)
 # checkMATPLOTLIB(x_train[0], y_train[0])
 
