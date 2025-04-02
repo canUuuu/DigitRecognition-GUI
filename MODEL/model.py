@@ -1,6 +1,7 @@
 from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Activation
 import os
+import numpy as np
 
 class CNNModel:
     def __init__(self, input_shape, model_path="MODEL/cnn_model.h5"):
@@ -58,3 +59,7 @@ class CNNModel:
         self.model.save(self.model_path)
         print(f"Model saved at {self.model_path}")
         self.is_load = True
+
+    def predict_digit(self, img):
+        test_image = img.reshape(-1, 28, 28, 1)
+        return np.argmax(self.model.predict(test_image))
