@@ -1,6 +1,6 @@
 from MODEL.model import CNNModel
 from utils import *
-
+import cv2
 # getting dataset
 # C:\Users\29192\.keras\datasets\mnist.npz
 mnist = tf.keras.datasets.mnist
@@ -23,5 +23,5 @@ if not model.is_load:
     # save
     model.save()
 # evaluate
-model.evaluate()
+model.evaluate(x_test,y_test)
 # ===================== model =====================
