@@ -1,37 +1,60 @@
-
-from tensorflow.keras.models import Sequential
+from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Activation
+import os
 
-def cnnModel(input_shape):
-    # Initialize a Sequential model
-    model = Sequential()
+class CNNModel:
+    def __init__(self, input_shape, model_path="MODEL/cnn_model.h5"):
+        self.model_path = model_path
+        if os.path.exists(self.model_path):
+            print(f"Loading model from {self.model_path}")
+            self.model = load_model(self.model_path)
+            self.is_load = True
+        else:
+            print("Creating a new model")
+            self.model = self.build_model(input_shape)
+            self.is_load = False
 
-    # First Convolutional layer
-    model.add(Conv2D(64, (3, 3), input_shape=input_shape))  # Apply 64 filters of size (3, 3)
-    model.add(Activation("relu"))  # Use ReLU activation
-    model.add(MaxPooling2D(pool_size=(2, 2)))  # Apply max pooling with a (2, 2) pool size
+    def build_model(self, input_shape):
+        model = Sequential()
+        model.add(Conv2D(64, (3, 3), input_shape=input_shape))
+        model.add(Activation("relu"))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    # Second Convolutional layer
-    model.add(Conv2D(64, (3, 3)))  # Apply 64 filters of size (3, 3)
-    model.add(Activation("relu"))  # Use ReLU activation
-    model.add(MaxPooling2D(pool_size=(2, 2)))  # Apply max pooling with a (2, 2) pool size
+        model.add(Conv2D(64, (3, 3)))
+        model.add(Activation("relu"))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    # Third Convolutional layer
-    model.add(Conv2D(64, (3, 3)))  # Apply 64 filters of size (3, 3)
-    model.add(Activation("relu"))  # Use ReLU activation
-    model.add(MaxPooling2D(pool_size=(2, 2)))  # Apply max pooling with a (2, 2) pool size
+        model.add(Conv2D(64, (3, 3)))
+        model.add(Activation("relu"))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
 
-    # Fully Connected (FC) layer 1 (flatten the 3D output from previous layers)
-    model.add(Flatten())  # Flatten the 3D output into 1D
-    model.add(Dense(64))  # Dense layer with 64 neurons
-    model.add(Activation("relu"))  # Use ReLU activation
+        model.add(Flatten())
+        model.add(Dense(64))
+        model.add(Activation("relu"))
 
-    # Fully Connected (FC) layer 2
-    model.add(Dense(32))  # Dense layer with 32 neurons
-    model.add(Activation("relu"))  # Use ReLU activation
+        model.add(Dense(32))
+        model.add(Activation("relu"))
 
-    # Fully Connected (FC) layer 3 (output layer with 10 neurons for classification)
-    model.add(Dense(10))  # Dense layer with 10 neurons (one for each class)
-    model.add(Activation("softmax"))  # Use Softmax activation for multi-class classification
+        model.add(Dense(10))
+        model.add(Activation("softmax"))
 
-    return model  # Return the constructed model
+        return model
+
+    def summary(self):
+        self.model.summary()
+
+    def compile(self, loss="sparse_categorical_crossentropy", optimizer="adam", metrics=["accuracy"]):
+        self.model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
+
+    def train(self, x_train, y_train, epochs=5, validation_split=0.3):
+        self.model.fit(x_train, y_train, epochs=epochs, validation_split=validation_split)
+
+    def evaluate(self, x_test, y_test):
+        test_loss, test_acc = self.model.evaluate(x_test, y_test)
+        print("Test loss on test samples: ", test_loss)
+        print("Validation accuracy: ", test_acc)
+
+    def save(self):
+        self.model.save(self.model_path)
+        print(f"Model saved at {self.model_path}")
+        self.is_load = True
