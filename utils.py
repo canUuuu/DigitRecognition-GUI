@@ -47,6 +47,11 @@ def put_label(t_img,label,x,y):
     return t_img
 
 
+import numpy as np
+import cv2
+import math
+
+
 def image_refiner(gray):
     '''Image preprocessing, resized to 28x28'''
     org_size = 22  # Original Size
@@ -61,15 +66,21 @@ def image_refiner(gray):
         factor = org_size / cols
         cols = org_size
         rows = int(round(rows * factor))
+
     gray = cv2.resize(gray, (cols, rows))
 
-    # get padding
+    # Calculate padding
     colsPadding = (int(math.ceil((img_size - cols) / 2.0)), int(math.floor((img_size - cols) / 2.0)))
     rowsPadding = (int(math.ceil((img_size - rows) / 2.0)), int(math.floor((img_size - rows) / 2.0)))
 
-    # apply apdding
-    gray = np.lib.pad(gray, (rowsPadding, colsPadding), 'constant')
-    return gray
+    # Manually apply padding by creating a new array and inserting the image
+    padded_image = np.zeros((img_size, img_size), dtype=gray.dtype)
+
+    # Insert the resized image into the center of the padded image
+    padded_image[rowsPadding[0]:rowsPadding[0] + rows, colsPadding[0]:colsPadding[0] + cols] = gray
+
+    return padded_image
+
 
 def get_output_image(path):
     img = cv2.imread(path, 0)  # 读取灰度图
@@ -102,7 +113,7 @@ def get_output_image(path):
             th, fnl = cv2.threshold(roi, 127, 255, cv2.THRESH_BINARY)  # 再次对裁剪的区域进行二值化，确保其为黑白图像
 
             # load训练好的model进行数字预测
-            model = CNNModel()
+            model = CNNModel(input_shape=(28, 28, 1))
             pred = model.predict_digit(roi)
             print(pred)
 
