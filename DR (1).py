@@ -1,13 +1,11 @@
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, Conv2D, MaxPooling2D
+from MODEL.model import cnnModel
 from utils import *
+from tensorflow.keras.models import Sequential
+
 import os
 import numpy as np
 
-
-
-
-# 调用函数并获取 mnist 数据集
+# getting dataset
 # C:\Users\29192\.keras\datasets\mnist.npz
 mnist = tf.keras.datasets.mnist
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -18,9 +16,17 @@ x_train , x_test = imageNormalization(x_train, x_test)
 checkMNISTdata(x_train, y_train, x_test, y_test)
 # checkMATPLOTLIB(x_train[0], y_train[0])
 
-model = Sequential()
+model = cnnModel(x_train.shape[1:])
+model.summary()
 
-# x_train.shape:[60000, 28, 28, channel = 1]
-model.add(Conv2D(64, (3, 3), input_shape = x_train.shape[1:]))
-model.add(Activation("relu"))
-model.add(MaxPooling2D(pool_size = (2, 2)))
+
+# train
+
+model.compile(loss = "sparse_categorical_crossentropy", optimizer = "adam", metrics=['accuracy'])
+model.fit(x_train, y_train, epochs = 5, validation_split = 0.3)
+
+model.sava("MODEL/cnnModel.h5")
+
+test_loss, test_acc = model.evaluate(x_test, y_test)
+print("Test loss on test samples: ", test_loss)
+print("Validation accuracy: ", test_acc)
