@@ -18,7 +18,7 @@ try:
         # start drawing after left click
         if(e.type == pygame.MOUSEBUTTONDOWN and e.button != 3):
             color = black
-            pygame.draw.circle(screen, color, e.pos, radius)
+            # pygame.draw.circle(screen, color, e.pos, radius)
             draw_on = True
 
         # stop drawing after releasing left click
