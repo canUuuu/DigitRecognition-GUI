@@ -87,6 +87,19 @@ def image_refiner(gray):
 
     return padded_image
 
+def printPred_array(pred_array):
+    # 对每一组（每个样本的 10 个概率）进行处理
+    for i in range(pred_array.shape[0]):  # 遍历每一个样本
+        # 提取当前样本的 10 个概率值
+        current_pred = pred_array[i, 0, :]
+
+        # 计算argmax，即最有可能的数字索引
+        pred_argmax = np.argmax(current_pred)
+
+        # 输出当前的argmax和这10个概率值
+        print(f"Sample {i + 1}:")
+        print(f"Predicted digit (argmax): {pred_argmax}")
+        print(f"Probabilities: {current_pred}")
 
 def get_output_image(path):
     img = cv2.imread(path, 0)  # 读取灰度图
@@ -122,15 +135,12 @@ def get_output_image(path):
             pred = model.predict_digit(roi)
             pred_list.append(pred)  # **把预测结果追加到列表**
             pred_argmax = np.argmax(pred)
-            print(pred_argmax)
-            print(pred)
 
             # 在图像上标注预测结果
             (x, y), radius = cv2.minEnclosingCircle(cnt)
             img_org = put_label(img_org, pred_argmax, x, y)
     pred_array = np.array(pred_list)  # **将列表转换为 NumPy 数组**
-    print("pred_array:")
-    print(pred_array)
+    printPred_array(pred_array)
     return img_org, pred_array
 # ===================== image processing ===================== #
 
