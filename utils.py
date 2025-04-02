@@ -4,6 +4,7 @@ import numpy as np
 import math
 import cv2
 import pygame
+import io
 
 from MODEL.model import CNNModel
 IMG_SIZE = 28
@@ -118,11 +119,12 @@ def get_output_image(path):
             # load训练好的model进行数字预测
             model = CNNModel(input_shape=(28, 28, 1))
             pred = model.predict_digit(roi)
+            pred_argmax = np.argmax(pred)
             print(pred)
 
             # 在图像上标注预测结果
             (x, y), radius = cv2.minEnclosingCircle(cnt)
-            img_org = put_label(img_org, pred, x, y)
+            img_org = put_label(img_org, pred_argmax, x, y)
 
     return img_org
 # ===================== image processing ===================== #

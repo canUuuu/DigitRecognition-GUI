@@ -64,4 +64,5 @@ class CNNModel:
 
     def predict_digit(self, img):
         test_image = img.reshape(-1, 28, 28, 1)
-        return np.argmax(self.model.predict(test_image))
+        # return np.argmax(self.model.predict(test_image))
+        return self.model.predict(test_image)
