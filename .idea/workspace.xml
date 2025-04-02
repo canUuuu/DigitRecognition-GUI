@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="864f803e-faba-4351-b45a-a1236c3dfa00" name="更改" comment="最好的模型">
+    <list default="true" id="864f803e-faba-4351-b45a-a1236c3dfa00" name="更改" comment="添加了可视化 但可视化窗口不更新">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ASSETS/out.png" beforeDir="false" afterPath="$PROJECT_DIR$/ASSETS/out.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GUI.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI.py" afterDir="false" />
@@ -215,7 +215,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743599327373</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="添加了可视化 但可视化窗口不更新">
+      <option name="closed" value="true" />
+      <created>1743602858409</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1743602858409</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -227,6 +235,7 @@
     <MESSAGE value="增加了GUI文件生成图形界面" />
     <MESSAGE value="简化模型, 降低过拟合程度" />
     <MESSAGE value="最好的模型" />
-    <option name="LAST_COMMIT_MESSAGE" value="最好的模型" />
+    <MESSAGE value="添加了可视化 但可视化窗口不更新" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加了可视化 但可视化窗口不更新" />
   </component>
 </project>

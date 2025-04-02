@@ -185,6 +185,51 @@ def show_output_image(img):
     surf = pygame.transform.flip(surf, 0, 1)
     screen.blit(surf, (width+2, 0)) # Display image on the right side
 
+def show_combined_output(img, pred):
+    """Displays the processed image and the prediction chart at their respective positions."""
+
+    # 处理 Pygame 图像
+    img_surf = pygame.pixelcopy.make_surface(img)
+    img_surf = pygame.transform.rotate(img_surf, -270)
+    img_surf = pygame.transform.flip(img_surf, 0, 1)
+
+    # 生成 Matplotlib 柱状图
+    fig, ax = plt.subplots(figsize=(3, 3))
+    x = np.arange(10)  # 0-9 数字
+    ax.bar(x, pred.flatten(), color='blue')  # 画柱状图
+    ax.set_xticks(x)
+    ax.set_xlabel("Digits")
+    ax.set_ylabel("Probability")
+    ax.set_title("Digit Probabilities")
+
+    # 保存 Matplotlib 图像到内存
+    buf = io.BytesIO()
+    plt.savefig(buf, format="PNG", bbox_inches="tight")
+    buf.seek(0)
+    plt.close(fig)  # 关闭 Matplotlib 图表，防止内存泄漏
+
+    # 读取 Matplotlib 图像，并转换为 Pygame 格式
+    try:
+        chart_surf = pygame.image.load(buf)
+    except pygame.error:
+        print("Error: Failed to load chart image")
+        return  # 直接返回，防止报错
+
+    buf.close()
+
+    # 调整柱状图大小
+    chart_surf = pygame.transform.scale(chart_surf, (width, height))
+
+    # 显示柱状图在 (width * 2 + 2, 0)
+    screen.blit(chart_surf, (width * 2 + 2, 0))
+    # 显示处理后的图像在 (width+2, 0)
+    screen.blit(img_surf, (width+2, 0))
+
+    # **强制更新这两个区域**
+    pygame.display.update([(width+2, 0, width, height), (width * 2 + 2, 0, width, height)])
+
+
+
 def crope(orginal):
     """Crops the drawn area slightly to remove boundary artifacts."""
     cropped = pygame.Surface((width-5, height-5))
