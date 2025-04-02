@@ -76,7 +76,7 @@ def get_output_image(path):
     img_org = cv2.imread(path)  # 读取原始彩色图
 
     ret, thresh = cv2.threshold(img, 127, 255, 0)  # 二值化 像素值大于 127 的会被设为 255（白色），小于 127 的会被设为 0（黑色）。
-    im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)  # 轮廓检测 轮廓 沿着物体的边缘
+    contours, hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)  # 轮廓检测 轮廓 沿着物体的边缘
 
     for j, cnt in enumerate(contours):
         # 计算轮廓的周长，epsilon 是一个小的阈值，用于调整近似程度

@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="864f803e-faba-4351-b45a-a1236c3dfa00" name="更改" comment="修改了GUI的app 增加到utilis中">
-      <change afterPath="$PROJECT_DIR$/GUI.py" afterDir="false" />
+    <list default="true" id="864f803e-faba-4351-b45a-a1236c3dfa00" name="更改" comment="增加了GUI文件生成图形界面">
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +33,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.GUI.executor": "Run",
     "Python.loadMNIST.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -170,7 +171,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743594120778</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="增加了GUI文件生成图形界面">
+      <option name="closed" value="true" />
+      <created>1743594377826</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1743594377826</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -179,6 +188,7 @@
     <MESSAGE value="save model to MODEL" />
     <MESSAGE value="修改了GUI的process_image 增加到utilis中" />
     <MESSAGE value="修改了GUI的app 增加到utilis中" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改了GUI的app 增加到utilis中" />
+    <MESSAGE value="增加了GUI文件生成图形界面" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加了GUI文件生成图形界面" />
   </component>
 </project>
