@@ -5,6 +5,7 @@ import math
 import cv2
 import pygame
 import io
+import os
 
 from MODEL.model import CNNModel
 IMG_SIZE = 28
@@ -42,6 +43,9 @@ def imageNormalization(x_train, x_test):
     return x_train, x_test
 
 # ===================== image processing ===================== #
+# load训练好的model进行数字预测
+model = CNNModel(input_shape=(28, 28, 1))
+
 def put_label(t_img,label,x,y):
     font = cv2.FONT_HERSHEY_SIMPLEX
     l_x = int(x) - 10
@@ -51,9 +55,7 @@ def put_label(t_img,label,x,y):
     return t_img
 
 
-import numpy as np
-import cv2
-import math
+
 
 
 def image_refiner(gray):
@@ -93,6 +95,7 @@ def get_output_image(path):
     ret, thresh = cv2.threshold(img, 127, 255, 0)  # 二值化 像素值大于 127 的会被设为 255（白色），小于 127 的会被设为 0（黑色）。
     contours, hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)  # 轮廓检测 轮廓 沿着物体的边缘
 
+    pred_list = []
     for j, cnt in enumerate(contours):
         # 计算轮廓的周长，epsilon 是一个小的阈值，用于调整近似程度
         epsilon = 0.01 * cv2.arcLength(cnt, True)
@@ -116,17 +119,19 @@ def get_output_image(path):
             roi = image_refiner(roi)  # 调整大小并填充
             th, fnl = cv2.threshold(roi, 127, 255, cv2.THRESH_BINARY)  # 再次对裁剪的区域进行二值化，确保其为黑白图像
 
-            # load训练好的model进行数字预测
-            model = CNNModel(input_shape=(28, 28, 1))
             pred = model.predict_digit(roi)
+            pred_list.append(pred)  # **把预测结果追加到列表**
             pred_argmax = np.argmax(pred)
+            print(pred_argmax)
             print(pred)
 
             # 在图像上标注预测结果
             (x, y), radius = cv2.minEnclosingCircle(cnt)
             img_org = put_label(img_org, pred_argmax, x, y)
-
-    return img_org, pred
+    pred_array = np.array(pred_list)  # **将列表转换为 NumPy 数组**
+    print("pred_array:")
+    print(pred_array)
+    return img_org, pred_array
 # ===================== image processing ===================== #
 
 # ===================== windows service ===================== #
@@ -196,32 +201,26 @@ def show_combined_output(img, pred):
     # 生成 Matplotlib 柱状图
     fig, ax = plt.subplots(figsize=(3, 3))
     x = np.arange(10)  # 0-9 数字
-    ax.bar(x, pred.flatten(), color='blue')  # 画柱状图
+    ax.bar(x, pred[0,0], color='blue')  # 画柱状图
     ax.set_xticks(x)
     ax.set_xlabel("Digits")
     ax.set_ylabel("Probability")
     ax.set_title("Digit Probabilities")
 
-    # 保存 Matplotlib 图像到内存
-    buf = io.BytesIO()
-    plt.savefig(buf, format="PNG", bbox_inches="tight")
-    buf.seek(0)
+    # **保存 Matplotlib 图像到文件**
+    os.makedirs("ASSETS", exist_ok=True)  # 确保目录存在
+    plt.savefig("ASSETS/Fig.png", format="PNG", bbox_inches="tight")
     plt.close(fig)  # 关闭 Matplotlib 图表，防止内存泄漏
 
-    # 读取 Matplotlib 图像，并转换为 Pygame 格式
+    # **尝试从文件加载柱状图**
     try:
-        chart_surf = pygame.image.load(buf)
-    except pygame.error:
-        print("Error: Failed to load chart image")
-        return  # 直接返回，防止报错
+        chart_surf = pygame.image.load("ASSETS/Fig.png")
+        # 调整柱状图大小
+        chart_surf = pygame.transform.scale(chart_surf, (width, height))
+        screen.blit(chart_surf, (width * 2 + 2, 0))
+    except pygame.error as e:
+        print(f"Error: Failed to load chart image from ASSETS/Fig.png: {e}")
 
-    buf.close()
-
-    # 调整柱状图大小
-    chart_surf = pygame.transform.scale(chart_surf, (width, height))
-
-    # 显示柱状图在 (width * 2 + 2, 0)
-    screen.blit(chart_surf, (width * 2 + 2, 0))
     # 显示处理后的图像在 (width+2, 0)
     screen.blit(img_surf, (width+2, 0))
 
