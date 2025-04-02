@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 import cv2
+import pygame
 
 from MODEL.model import CNNModel
 IMG_SIZE = 28
@@ -110,3 +111,52 @@ def get_output_image(path):
             img_org = put_label(img_org, pred, x, y)
 
     return img_org
+# ===================== image processing ===================== #
+
+# ===================== windows service ===================== #
+# pre defined colors, pen radius and font color
+black = [0, 0, 0]
+white = [255, 255, 255]
+red = [255, 0, 0]
+green = [0, 255, 0]
+draw_on = False
+last_pos = (0, 0)
+color = (255, 128, 0)
+radius = 7
+font_size = 500
+
+#image size
+width = 640
+height = 640
+
+# initializing screen
+screen = pygame.display.set_mode((width*2, height))
+screen.fill(white)
+pygame.font.init()
+
+def show_output_image(img):
+    """Displays the processed image on the right side of the screen."""
+    surf = pygame.pixelcopy.make_surface(img)
+    surf = pygame.transform.rotate(surf, -270)
+    surf = pygame.transform.flip(surf, 0, 1)
+    screen.blit(surf, (width+2, 0)) # Display image on the right side
+
+def crope(orginal):
+    """Crops the drawn area slightly to remove boundary artifacts."""
+    cropped = pygame.Surface((width-5, height-5))
+    cropped.blit(orginal, (0, 0), (0, 0, width-5, height-5))
+    return cropped
+
+def roundline(srf, color, start, end, radius=1):
+    """Draws smooth lines by interpolating between points."""
+    dx = end[0] - start[0]
+    dy = end[1] - start[1]
+    distance = max(abs(dx), abs(dy))
+    for i in range(distance):
+        x = int(start[0] + float(i) / distance * dx)
+        y = int(start[1] + float(i) / distance * dy)
+        pygame.draw.circle(srf, color, (x, y), radius)
+
+def draw_partition_line():
+    """Draws a vertical separation line between drawing and output areas."""
+    pygame.draw.line(screen, black, [width, 0], [width,height ], 8)
