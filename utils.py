@@ -126,7 +126,7 @@ def get_output_image(path):
             (x, y), radius = cv2.minEnclosingCircle(cnt)
             img_org = put_label(img_org, pred_argmax, x, y)
 
-    return img_org
+    return img_org, pred
 # ===================== image processing ===================== #
 
 # ===================== windows service ===================== #
@@ -146,9 +146,37 @@ width = 640
 height = 640
 
 # initializing screen
-screen = pygame.display.set_mode((width*2, height))
+screen = pygame.display.set_mode((width*3, height))
 screen.fill(white)
 pygame.font.init()
+
+
+def show_prediction_chart(pred):
+    """Displays the prediction chart on the right side of the screen, next to the processed image."""
+
+    # 生成 Matplotlib 图表
+    fig, ax = plt.subplots(figsize=(3, 3))
+    x = np.arange(10)  # 0-9 数字
+    ax.bar(x, pred.flatten(), color='blue')  # 画柱状图
+    ax.set_xticks(x)
+    ax.set_xlabel("Digits")
+    ax.set_ylabel("Probability")
+    ax.set_title("Digit Probabilities")
+
+    # 保存 Matplotlib 图像到内存
+    buf = io.BytesIO()
+    plt.savefig(buf, format="PNG", bbox_inches="tight")
+    buf.seek(0)
+    plt.close(fig)  # 关闭 Matplotlib 图表，防止内存泄漏
+
+    # 读取 Matplotlib 图像，并转换为 Pygame 格式
+    img = pygame.image.load(buf)
+    buf.close()
+
+    # 处理 Pygame 图像，使其正确显示
+    surf = pygame.transform.scale(img, (width, height))  # 调整大小
+    screen.blit(surf, (width * 2 + 2, 0))  # 显示在最右侧
+
 
 def show_output_image(img):
     """Displays the processed image on the right side of the screen."""
@@ -174,5 +202,6 @@ def roundline(srf, color, start, end, radius=1):
         pygame.draw.circle(srf, color, (x, y), radius)
 
 def draw_partition_line():
-    """Draws a vertical separation line between drawing and output areas."""
-    pygame.draw.line(screen, black, [width, 0], [width,height ], 8)
+    """Draws vertical separation lines to divide the sections."""
+    pygame.draw.line(screen, black, [width, 0], [width, height], 8)  # 左侧和中间的分割线
+    pygame.draw.line(screen, black, [width * 2, 0], [width * 2, height], 8)  # 中间和右侧的分割线

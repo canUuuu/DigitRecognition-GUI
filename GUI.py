@@ -29,7 +29,8 @@ try:
             img = crope(screen)
             pygame.image.save(img, fname)
 
-            output_img = get_output_image(fname)
+            output_img, pred = get_output_image(fname)
+            show_prediction_chart(pred)
             show_output_image(output_img)
 
         # start drawing line on screen if draw is true
