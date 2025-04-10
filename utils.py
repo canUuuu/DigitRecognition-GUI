@@ -206,10 +206,16 @@ def show_combined_output(img, pred):
     img_surf = pygame.transform.rotate(img_surf, -270)
     img_surf = pygame.transform.flip(img_surf, 0, 1)
 
-    # 生成 Matplotlib 柱状图
+    # 生成 Matplotlib 图表
     fig, ax = plt.subplots(figsize=(3, 3))
     x = np.arange(10)  # 0-9 数字
-    ax.bar(x, pred[0,0], color='blue')  # 画柱状图
+
+    # 检查 pred 是否为空，如果为空则不绘制柱状图
+    if pred.size > 0:
+        ax.bar(x, pred[0, 0], color='blue')  # 画柱状图
+    else:
+        print("Prediction array is empty, skipping chart.")
+
     ax.set_xticks(x)
     ax.set_xlabel("Digits")
     ax.set_ylabel("Probability")
@@ -230,10 +236,11 @@ def show_combined_output(img, pred):
         print(f"Error: Failed to load chart image from ASSETS/Fig.png: {e}")
 
     # 显示处理后的图像在 (width+2, 0)
-    screen.blit(img_surf, (width+2, 0))
+    screen.blit(img_surf, (width + 2, 0))
 
     # **强制更新这两个区域**
-    pygame.display.update([(width+2, 0, width, height), (width * 2 + 2, 0, width, height)])
+    pygame.display.update([(width + 2, 0, width, height), (width * 2 + 2, 0, width, height)])
+
 
 
 
