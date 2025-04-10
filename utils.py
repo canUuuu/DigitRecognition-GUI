@@ -9,6 +9,7 @@ import os
 
 from MODEL.model import CNNModel
 IMG_SIZE = 28
+'''
 def checkMATPLOTLIB(image, label):
     plt.figure(figsize=(12, 4))  # 设置整体图像大小
 
@@ -31,6 +32,9 @@ def checkMNISTdata(x_train, y_train, x_test, y_test):
     print(f"y_train shape: {y_train.shape}") # labels
     print(f"x_test shape: {x_test.shape}")
     print(f"y_train shape: {y_test.shape}")
+
+'''
+# ===================== image processing ===================== #
 def imageNormalization(x_train, x_test):
 
     # x_train = tf.keras.utils.normalize(x_train, axis = 1)
@@ -41,8 +45,6 @@ def imageNormalization(x_train, x_test):
     x_train = np.array(x_train).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
     x_test = np.array(x_test).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
     return x_train, x_test
-
-# ===================== image processing ===================== #
 # load训练好的model进行数字预测
 model = CNNModel(input_shape=(28, 28, 1))
 
@@ -53,10 +55,6 @@ def put_label(t_img,label,x,y):
     cv2.rectangle(t_img,(l_x,l_y+5),(l_x+35,l_y-35),(0,255,0),-1)
     cv2.putText(t_img,str(label),(l_x,l_y), font,1.5,(255,0,0),1,cv2.LINE_AA)
     return t_img
-
-
-
-
 
 def image_refiner(gray):
     '''Image preprocessing, resized to 28x28'''
