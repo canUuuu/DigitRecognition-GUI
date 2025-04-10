@@ -8,56 +8,95 @@ import io
 import os
 
 from MODEL.model import CNNModel
+# ===================== global configuration ===================== #
 IMG_SIZE = 28
-'''
-def checkMATPLOTLIB(image, label):
-    plt.figure(figsize=(12, 4))  # 设置整体图像大小
+# :para black: RGB value for black color used in drawing and UI elements.
+black = [0, 0, 0]
 
-    # 左侧：默认颜色（伪彩色）
-    plt.subplot(1, 2, 1)  # 1行2列，第1个
-    plt.imshow(image)
-    plt.title(f"Original (Label: {label})")
-    plt.axis("off")
+# :para white: RGB value for white color, used as background color.
+white = [255, 255, 255]
 
-    # 右侧：灰度显示
-    plt.subplot(1, 2, 2)  # 1行2列，第2个
-    plt.imshow(image, cmap= 'gray')
-    plt.title(f"Grayscale (Label: {label})")
-    plt.colorbar()  # 显示颜色条
-    plt.axis("off")
+# :para red: RGB value for red color, can be used for alerts or highlights.
+red = [255, 0, 0]
 
-    plt.show()
-def checkMNISTdata(x_train, y_train, x_test, y_test):
-    print(f"x_train shape: {x_train.shape}") # samples
-    print(f"y_train shape: {y_train.shape}") # labels
-    print(f"x_test shape: {x_test.shape}")
-    print(f"y_train shape: {y_test.shape}")
+# :para green: RGB value for green color, used for bounding boxes and highlights.
+green = [0, 255, 0]
 
-'''
+# :para draw_on: Flag to indicate if the drawing mode is active.
+draw_on = False
+
+# :para last_pos: Stores the last mouse/touch position for continuous drawing.
+last_pos = (0, 0)
+
+# :para color: Current drawing color, default is orange (255, 128, 0).
+color = (255, 128, 0)
+
+# :para radius: Radius of the drawing brush/stroke.
+radius = 7
+
+# :para font_size: Font size for number rendering (if used with pygame.font).
+font_size = 500
+
+# ===================== image size configuration ===================== #
+
+# :para width: Width of a single drawing/prediction panel.
+width = 640
+
+# :para height: Height of the drawing/prediction panel.
+height = 640
+
+# ===================== pygame screen initialization ===================== #
+
+# :para screen: The main pygame display surface initialized to 3*width by height.
+screen = pygame.display.set_mode((width * 3, height))
+
+# Fill the screen background with white color initially
+screen.fill(white)
+
+# :para pygame.font.init: Initializes the font module in pygame.
+pygame.font.init()
+
+
+
+
 # ===================== image processing ===================== #
-def imageNormalization(x_train, x_test):
 
-    # x_train = tf.keras.utils.normalize(x_train, axis = 1)
-    # x_test = tf.keras.utils.normalize(x_test, axis = 1)
-    _,x_train = cv2.threshold(x_train,127,255,cv2.THRESH_BINARY)
-    _,x_test = cv2.threshold(x_test,127,255,cv2.THRESH_BINARY)
+def imageNormalization(x_train, x_test):
+    """
+    :para x_train: Input training images (numpy array).
+    :para x_test: Input test images (numpy array).
+    :return: Normalized and reshaped x_train and x_test images.
+    """
+    # _, x_train = cv2.threshold(x_train, 127, 255, cv2.THRESH_BINARY)
+    # _, x_test = cv2.threshold(x_test, 127, 255, cv2.THRESH_BINARY)
+
     # reshape the input image to 28x28, channel=1
     x_train = np.array(x_train).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
     x_test = np.array(x_test).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
     return x_train, x_test
-# load训练好的model进行数字预测
-# model = CNNModel(input_shape=(28, 28, 1))
 
-def put_label(t_img,label,x,y):
+
+def put_label(t_img, label, x, y):
+    """
+    :para t_img: The image to place the label on (numpy array).
+    :para label: The label to be placed on the image.
+    :para x: The x-coordinate for the label position.
+    :para y: The y-coordinate for the label position.
+    :return: The image with the label placed on it.
+    """
     font = cv2.FONT_HERSHEY_SIMPLEX
     l_x = int(x) - 10
     l_y = int(y) + 10
-    cv2.rectangle(t_img,(l_x,l_y+5),(l_x+35,l_y-35),(0,255,0),-1)
-    cv2.putText(t_img,str(label),(l_x,l_y), font,1.5,(255,0,0),1,cv2.LINE_AA)
+    cv2.rectangle(t_img, (l_x, l_y + 5), (l_x + 35, l_y - 35), (0, 255, 0), -1)
+    cv2.putText(t_img, str(label), (l_x, l_y), font, 1.5, (255, 0, 0), 1, cv2.LINE_AA)
     return t_img
 
+
 def image_refiner(gray):
-    '''Image preprocessing, resized to 28x28'''
+    """
+    :para gray: The grayscale image to be resized and padded (numpy array).
+    :return: A padded and resized image of size 28x28.
+    """
     org_size = 22  # Original Size
     img_size = 28  # Target size
     rows, cols = gray.shape
@@ -85,134 +124,116 @@ def image_refiner(gray):
 
     return padded_image
 
-def printPred_array(pred_array):
-    # 对每一组（每个样本的 10 个概率）进行处理
-    for i in range(pred_array.shape[0]):  # 遍历每一个样本
-        # 提取当前样本的 10 个概率值
-        current_pred = pred_array[i, 0, :]
 
-        # 计算argmax，即最有可能的数字索引
+def printPred_array(pred_array):
+    """
+    :para pred_array: A numpy array of predictions (each containing 10 probability values for each sample).
+    :return: Prints the predicted digit and probabilities for each sample.
+    """
+    for i in range(pred_array.shape[0]):  # Iterate through each sample
+        current_pred = pred_array[i, 0, :]
         pred_argmax = np.argmax(current_pred)
 
-        # 输出当前的argmax和这10个概率值
         print(f"Sample {i + 1}:")
         print(f"Predicted digit (argmax): {pred_argmax}")
         print(f"Probabilities: {current_pred}")
 
-def get_output_image(path,model):
-    img = cv2.imread(path, 0)  # 读取灰度图
-    img_org = cv2.imread(path)  # 读取原始彩色图
 
-    ret, thresh = cv2.threshold(img, 127, 255, 0)  # 二值化 像素值大于 127 的会被设为 255（白色），小于 127 的会被设为 0（黑色）。
-    contours, hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)  # 轮廓检测 轮廓 沿着物体的边缘
+def get_output_image(path, model):
+    """
+    :para path: The file path to the image to be processed.
+    :para model: The trained model for predicting the digit.
+    :return: The processed image with bounding boxes and predicted labels, along with the prediction array.
+    """
+    img = cv2.imread(path, 0)  # Read the grayscale image
+    img_org = cv2.imread(path)  # Read the original colored image
+
+    ret, thresh = cv2.threshold(img, 127, 255, 0)  # Threshold the image
+    contours, hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
 
     pred_list = []
     for j, cnt in enumerate(contours):
-        # 计算轮廓的周长，epsilon 是一个小的阈值，用于调整近似程度
         epsilon = 0.01 * cv2.arcLength(cnt, True)
-        # 使用近似多边形来逼近轮廓，epsilon 控制逼近精度
         approx = cv2.approxPolyDP(cnt, epsilon, True)
-
-        # 获取轮廓的凸包（即围绕轮廓的最小凸形状）
         hull = cv2.convexHull(cnt)
-        # 判断该轮廓是否是凸的
         k = cv2.isContourConvex(cnt)
-        x, y, w, h = cv2.boundingRect(cnt)  # 获取矩形边界框
+        x, y, w, h = cv2.boundingRect(cnt)
 
-        # 如果轮廓是有效的（hierarchy[0][j][3] != -1 表示该轮廓没有父轮廓）并且其尺寸大于阈值，过滤掉小噪声
-        if hierarchy[0][j][3] != -1 and w > 10 and h > 10:  # 过滤小的噪声轮廓
-            # 在图像上绘制绿色矩形框，标注识别区域
+        if hierarchy[0][j][3] != -1 and w > 10 and h > 10:  # Filter out small noise contours
             cv2.rectangle(img_org, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-            # 裁剪数字部分 提取出轮廓内的区域
             roi = img[y:y + h, x:x + w]
-            roi = cv2.bitwise_not(roi)  # 反转颜色（黑底白字）符合mnist训练集的要求
-            roi = image_refiner(roi)  # 调整大小并填充
-            th, fnl = cv2.threshold(roi, 127, 255, cv2.THRESH_BINARY)  # 再次对裁剪的区域进行二值化，确保其为黑白图像
+            roi = cv2.bitwise_not(roi)
+            roi = image_refiner(roi)
+            th, fnl = cv2.threshold(roi, 127, 255, cv2.THRESH_BINARY)
 
             pred = model.predict_digit(roi)
-            pred_list.append(pred)  # **把预测结果追加到列表**
+            pred_list.append(pred)
             pred_argmax = np.argmax(pred)
 
-            # 在图像上标注预测结果
             (x, y), radius = cv2.minEnclosingCircle(cnt)
             img_org = put_label(img_org, pred_argmax, x, y)
-    pred_array = np.array(pred_list)  # **将列表转换为 NumPy 数组**
+
+    pred_array = np.array(pred_list)
     printPred_array(pred_array)
     return img_org, pred_array
+
+
 # ===================== image processing ===================== #
 
 # ===================== windows service ===================== #
-# pre defined colors, pen radius and font color
-black = [0, 0, 0]
-white = [255, 255, 255]
-red = [255, 0, 0]
-green = [0, 255, 0]
-draw_on = False
-last_pos = (0, 0)
-color = (255, 128, 0)
-radius = 7
-font_size = 500
-
-#image size
-width = 640
-height = 640
-
-# initializing screen
-screen = pygame.display.set_mode((width*3, height))
-screen.fill(white)
-pygame.font.init()
-
 
 def show_prediction_chart(pred):
-    """Displays the prediction chart on the right side of the screen, next to the processed image."""
-
-    # 生成 Matplotlib 图表
+    """
+    :para pred: Prediction array with probabilities for each digit.
+    :return: Displays a bar chart showing digit probabilities.
+    """
     fig, ax = plt.subplots(figsize=(3, 3))
-    x = np.arange(10)  # 0-9 数字
-    ax.bar(x, pred.flatten(), color='blue')  # 画柱状图
+    x = np.arange(10)  # 0-9 digits
+    ax.bar(x, pred.flatten(), color='blue')
     ax.set_xticks(x)
     ax.set_xlabel("Digits")
     ax.set_ylabel("Probability")
     ax.set_title("Digit Probabilities")
 
-    # 保存 Matplotlib 图像到内存
     buf = io.BytesIO()
     plt.savefig(buf, format="PNG", bbox_inches="tight")
     buf.seek(0)
-    plt.close(fig)  # 关闭 Matplotlib 图表，防止内存泄漏
+    plt.close(fig)
 
-    # 读取 Matplotlib 图像，并转换为 Pygame 格式
     img = pygame.image.load(buf)
     buf.close()
 
-    # 处理 Pygame 图像，使其正确显示
-    surf = pygame.transform.scale(img, (width, height))  # 调整大小
-    screen.blit(surf, (width * 2 + 2, 0))  # 显示在最右侧
+    surf = pygame.transform.scale(img, (width, height))
+    screen.blit(surf, (width * 2 + 2, 0))
 
 
 def show_output_image(img):
-    """Displays the processed image on the right side of the screen."""
+    """
+    :para img: The processed image to be displayed.
+    :return: Displays the processed image on the screen.
+    """
     surf = pygame.pixelcopy.make_surface(img)
     surf = pygame.transform.rotate(surf, -270)
     surf = pygame.transform.flip(surf, 0, 1)
-    screen.blit(surf, (width+2, 0)) # Display image on the right side
+    screen.blit(surf, (width + 2, 0))
+
 
 def show_combined_output(img, pred):
-    """Displays the processed image and the prediction chart at their respective positions."""
-
-    # 处理 Pygame 图像
+    """
+    :para img: The processed image to be displayed.
+    :para pred: The prediction array for the displayed image.
+    :return: Displays the image and the prediction chart side by side.
+    """
     img_surf = pygame.pixelcopy.make_surface(img)
     img_surf = pygame.transform.rotate(img_surf, -270)
     img_surf = pygame.transform.flip(img_surf, 0, 1)
 
-    # 生成 Matplotlib 图表
     fig, ax = plt.subplots(figsize=(3, 3))
-    x = np.arange(10)  # 0-9 数字
+    x = np.arange(10)
 
-    # 检查 pred 是否为空，如果为空则不绘制柱状图
     if pred.size > 0:
-        ax.bar(x, pred[0, 0], color='blue')  # 画柱状图
+        ax.bar(x, pred[0, 0], color='blue')
     else:
         print("Prediction array is empty, skipping chart.")
 
@@ -221,37 +242,41 @@ def show_combined_output(img, pred):
     ax.set_ylabel("Probability")
     ax.set_title("Digit Probabilities")
 
-    # **保存 Matplotlib 图像到文件**
-    os.makedirs("ASSETS", exist_ok=True)  # 确保目录存在
+    os.makedirs("ASSETS", exist_ok=True)
     plt.savefig("ASSETS/Fig.png", format="PNG", bbox_inches="tight")
-    plt.close(fig)  # 关闭 Matplotlib 图表，防止内存泄漏
+    plt.close(fig)
 
-    # **尝试从文件加载柱状图**
     try:
         chart_surf = pygame.image.load("ASSETS/Fig.png")
-        # 调整柱状图大小
         chart_surf = pygame.transform.scale(chart_surf, (width, height))
         screen.blit(chart_surf, (width * 2 + 2, 0))
     except pygame.error as e:
         print(f"Error: Failed to load chart image from ASSETS/Fig.png: {e}")
 
-    # 显示处理后的图像在 (width+2, 0)
     screen.blit(img_surf, (width + 2, 0))
 
-    # **强制更新这两个区域**
     pygame.display.update([(width + 2, 0, width, height), (width * 2 + 2, 0, width, height)])
 
 
-
-
-def crope(orginal):
-    """Crops the drawn area slightly to remove boundary artifacts."""
-    cropped = pygame.Surface((width-5, height-5))
-    cropped.blit(orginal, (0, 0), (0, 0, width-5, height-5))
+def crope(original):
+    """
+    :para original: The original pygame surface to be cropped.
+    :return: A cropped version of the original surface.
+    """
+    cropped = pygame.Surface((width - 5, height - 5))
+    cropped.blit(original, (0, 0), (0, 0, width - 5, height - 5))
     return cropped
 
+
 def roundline(srf, color, start, end, radius=1):
-    """Draws smooth lines by interpolating between points."""
+    """
+    :para srf: The surface on which to draw the line.
+    :para color: The color of the line.
+    :para start: The start point of the line (tuple).
+    :para end: The end point of the line (tuple).
+    :para radius: The radius of the line, defaults to 1.
+    :return: None. Draws the line on the surface.
+    """
     dx = end[0] - start[0]
     dy = end[1] - start[1]
     distance = max(abs(dx), abs(dy))
@@ -260,7 +285,10 @@ def roundline(srf, color, start, end, radius=1):
         y = int(start[1] + float(i) / distance * dy)
         pygame.draw.circle(srf, color, (x, y), radius)
 
+
 def draw_partition_line():
-    """Draws vertical separation lines to divide the sections."""
-    pygame.draw.line(screen, black, [width, 0], [width, height], 8)  # 左侧和中间的分割线
-    pygame.draw.line(screen, black, [width * 2, 0], [width * 2, height], 8)  # 中间和右侧的分割线
+    """
+    :return: Draws vertical partition lines to divide the sections of the window.
+    """
+    pygame.draw.line(screen, black, [width, 0], [width, height], 8)
+    pygame.draw.line(screen, black, [width * 2, 0], [width * 2, height], 8)
