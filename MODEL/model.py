@@ -4,7 +4,7 @@ import os
 import numpy as np
 
 class CNNModel:
-    def __init__(self, input_shape, model_path):
+    def __init__(self, input_shape, model_path="MODEL/cnn_model.h5"):
         self.model_path = model_path
         if os.path.exists(self.model_path):
             print(f"Loading model from {self.model_path}")

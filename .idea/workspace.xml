@@ -53,7 +53,7 @@
       <recent name="D:\app\pycharm\python project\DigitRecognition" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.train">
+  <component name="RunManager" selected="Python.GUI">
     <configuration name="GUI" type="PythonConfigurationType" factoryName="Python">
       <module name="DigitRecognition" />
       <option name="ENV_FILES" value="" />
