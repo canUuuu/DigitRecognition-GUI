@@ -46,7 +46,7 @@ def imageNormalization(x_train, x_test):
     x_test = np.array(x_test).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
     return x_train, x_test
 # load训练好的model进行数字预测
-model = CNNModel(input_shape=(28, 28, 1))
+# model = CNNModel(input_shape=(28, 28, 1))
 
 def put_label(t_img,label,x,y):
     font = cv2.FONT_HERSHEY_SIMPLEX
@@ -99,7 +99,7 @@ def printPred_array(pred_array):
         print(f"Predicted digit (argmax): {pred_argmax}")
         print(f"Probabilities: {current_pred}")
 
-def get_output_image(path):
+def get_output_image(path,model):
     img = cv2.imread(path, 0)  # 读取灰度图
     img_org = cv2.imread(path)  # 读取原始彩色图
 
