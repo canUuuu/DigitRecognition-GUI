@@ -54,31 +54,22 @@ class CNNModel:
 
     def build_model(self, input_shape):
         model = Sequential()
+        model.add(Conv2D(32, (3, 3), input_shape=input_shape))
+        model.add(Activation("relu"))
 
-        # C1 - Convolutional Layer
-        model.add(Conv2D(filters=6, kernel_size=(5, 5), activation='relu', input_shape=input_shape))
+        model.add(Conv2D(64, (3, 3)))
+        model.add(Activation("relu"))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
 
-        # S2 - Subsampling Layer (Average Pooling)
-        model.add(AveragePooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.25))
 
-        # C3 - Convolutional Layer
-        model.add(Conv2D(filters=16, kernel_size=(5, 5), activation='relu'))
-
-        # S4 - Subsampling Layer (Average Pooling)
-        model.add(AveragePooling2D(pool_size=(2, 2)))
-
-        # Flatten
         model.add(Flatten())
+        model.add(Dense(128))
+        model.add(Activation("relu"))
 
-        # C5 - Fully Connected Layer
-        model.add(Dense(120, activation='relu'))
-
-        # F6 - Fully Connected Layer
-        model.add(Dense(84, activation='relu'))
-
-        # Output Layer
-        model.add(Dense(10, activation='softmax'))
-
+        model.add(Dropout(0.5))
+        model.add(Dense(10))
+        model.add(Activation("softmax"))
         self.model = model
         self.compile()
 

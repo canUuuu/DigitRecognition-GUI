@@ -11,8 +11,8 @@ def main():
     x_train, x_test = imageNormalization(x_train, x_test,mean=0.1037, std=0.3081)
 
     # Resize 到 32×32 for LeNet-5
-    x_train = tf.image.resize(x_train, [32, 32]).numpy()
-    x_test = tf.image.resize(x_test, [32, 32]).numpy()
+    # x_train = tf.image.resize(x_train, [32, 32]).numpy()
+    # x_test = tf.image.resize(x_test, [32, 32]).numpy()
 
     print("x_train shape:", x_train.shape)  # (60000, 32, 32, 1)
     print("x_test shape:", x_test.shape)  # (10000, 32, 32, 1)
