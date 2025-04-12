@@ -1,8 +1,9 @@
 import tensorflow as tf
 from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.optimizers import Adam
 from sklearn.metrics import confusion_matrix
 import numpy as np
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Activation, Dropout
+from tensorflow.keras.layers import Conv2D, AveragePooling2D, MaxPooling2D, Flatten, Dense, Activation, Dropout
 import os
 import pandas as pd
 
@@ -53,41 +54,51 @@ class CNNModel:
 
     def build_model(self, input_shape):
         model = Sequential()
-        model.add(Conv2D(32, (3, 3), input_shape=input_shape))
-        model.add(Activation("relu"))
-        # model.add(MaxPooling2D(pool_size=(2, 2)))
 
-        model.add(Conv2D(64, (3, 3)))
-        model.add(Activation("relu"))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
+        # C1 - Convolutional Layer
+        model.add(Conv2D(filters=6, kernel_size=(5, 5), activation='relu', input_shape=input_shape))
 
-        model.add(Dropout(0.25))
-        # model.add(Conv2D(64, (3, 3)))
-        # model.add(Activation("relu"))
-        # model.add(MaxPooling2D(pool_size=(2, 2)))
+        # S2 - Subsampling Layer (Average Pooling)
+        model.add(AveragePooling2D(pool_size=(2, 2)))
 
+        # C3 - Convolutional Layer
+        model.add(Conv2D(filters=16, kernel_size=(5, 5), activation='relu'))
+
+        # S4 - Subsampling Layer (Average Pooling)
+        model.add(AveragePooling2D(pool_size=(2, 2)))
+
+        # Flatten
         model.add(Flatten())
-        model.add(Dense(128))
-        model.add(Activation("relu"))
 
-        # model.add(Dense(32))
-        # model.add(Activation("relu"))
+        # C5 - Fully Connected Layer
+        model.add(Dense(120, activation='relu'))
 
-        model.add(Dropout(0.5))
-        model.add(Dense(10))
-        model.add(Activation("softmax"))
+        # F6 - Fully Connected Layer
+        model.add(Dense(84, activation='relu'))
+
+        # Output Layer
+        model.add(Dense(10, activation='softmax'))
+
         self.model = model
         self.compile()
 
     def summary(self):
         self.model.summary()
 
-    def compile(self, loss="sparse_categorical_crossentropy", optimizer="adam", metrics=["accuracy"]):
+    def compile(self, loss="sparse_categorical_crossentropy", learning_rate=0.001, metrics=["accuracy"]):
+        optimizer = Adam(learning_rate=learning_rate)
         self.model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
 
-    def train(self, x_train, y_train, epochs=5, validation_split=0.3):
+    def train(self, x_train, y_train, epochs=5, validation_split=0, batch_size=32):
         save_callback = SaveEpochMetricsCallback(self.model_log_path)
-        self.model.fit(x_train, y_train, epochs=epochs, validation_split=validation_split, callbacks=[save_callback])
+        self.model.fit(
+            x_train,
+            y_train,
+            epochs=epochs,
+            validation_split=validation_split,
+            batch_size=batch_size,
+            callbacks=[save_callback]
+        )
 
     def evaluate(self, x_test, y_test):
         # 评估 loss 和 acc
@@ -95,21 +106,21 @@ class CNNModel:
         print("Test loss on test samples: ", test_loss)
         print("Validation accuracy: ", test_acc)
 
-        # 获取预测类别（取 argmax）
-        y_pred_probs = self.model.predict(x_test)
-        y_pred = np.argmax(y_pred_probs, axis=1)
-
-        # 生成混淆矩阵（假设类别是从 0 到 9）
-        labels = sorted(list(set(y_test)))
-        cm = confusion_matrix(y_test, y_pred, labels=labels)
-
-        # 转换为带标签的 DataFrame
-        df_cm = pd.DataFrame(cm, index=[f"True_{i}" for i in labels],
-                             columns=[f"Pred_{i}" for i in labels])
-
-        # 保存到 CSV
-        df_cm.to_csv("result/confusion_matrix.csv")
-        print("Confusion matrix saved to result/confusion_matrix.csv")
+        # # 获取预测类别（取 argmax）
+        # y_pred_probs = self.model.predict(x_test)
+        # y_pred = np.argmax(y_pred_probs, axis=1)
+        #
+        # # 生成混淆矩阵（假设类别是从 0 到 9）
+        # labels = sorted(list(set(y_test)))
+        # cm = confusion_matrix(y_test, y_pred, labels=labels)
+        #
+        # # 转换为带标签的 DataFrame
+        # df_cm = pd.DataFrame(cm, index=[f"True_{i}" for i in labels],
+        #                      columns=[f"Pred_{i}" for i in labels])
+        #
+        # # 保存到 CSV
+        # df_cm.to_csv("result/confusion_matrix.csv")
+        # print("Confusion matrix saved to result/confusion_matrix.csv")
 
     def save(self):
         self.model.save(self.model_path)

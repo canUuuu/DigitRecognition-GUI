@@ -61,7 +61,7 @@ pygame.font.init()
 
 # ===================== image processing ===================== #
 
-def imageNormalization(x_train, x_test):
+def imageNormalization(x_train, x_test, mean=0.1037, std=0.3081):
     """
     :para x_train: Input training images (numpy array).
     :para x_test: Input test images (numpy array).
@@ -69,6 +69,14 @@ def imageNormalization(x_train, x_test):
     """
     # _, x_train = cv2.threshold(x_train, 127, 255, cv2.THRESH_BINARY)
     # _, x_test = cv2.threshold(x_test, 127, 255, cv2.THRESH_BINARY)
+
+    # # normalization
+    x_train = x_train.astype("float32") / 255.0
+    x_test = x_test.astype("float32") / 255.0
+
+    # Normalize by subtracting the mean and dividing by the standard deviation
+    x_train = (x_train - mean) / std
+    x_test = (x_test - mean) / std
 
     # reshape the input image to 28x28, channel=1
     x_train = np.array(x_train).reshape(-1, IMG_SIZE, IMG_SIZE, 1)

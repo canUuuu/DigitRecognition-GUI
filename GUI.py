@@ -8,7 +8,14 @@ def main():
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
     # Normalize and reshape the images to [num_samples, 28, 28, 1]
-    x_train, x_test = imageNormalization(x_train, x_test)
+    x_train, x_test = imageNormalization(x_train, x_test,mean=0.1037, std=0.3081)
+
+    # Resize 到 32×32 for LeNet-5
+    x_train = tf.image.resize(x_train, [32, 32]).numpy()
+    x_test = tf.image.resize(x_test, [32, 32]).numpy()
+
+    print("x_train shape:", x_train.shape)  # (60000, 32, 32, 1)
+    print("x_test shape:", x_test.shape)  # (10000, 32, 32, 1)
 
     # ===================== Train / Load Model =====================
     model_path = "MODEL/cnn_model.h5"
@@ -19,7 +26,7 @@ def main():
 
     # If model is not loaded, compile and train it
     if not model.is_load:
-        model.train(x_train,y_train,epochs=20,validation_split=0.3)
+        model.train(x_train,y_train,epochs=20,batch_size=32)
         model.save()  # Save the trained model
 
     model.evaluate(x_test,y_test)
