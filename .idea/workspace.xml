@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="864f803e-faba-4351-b45a-a1236c3dfa00" name="更改" comment="规范化utils">
-      <change afterPath="$PROJECT_DIR$/draw.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUI.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MODEL/cnn_model.h5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MODEL/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/MODEL/model.py" afterDir="false" />
-    </list>
+    <list default="true" id="864f803e-faba-4351-b45a-a1236c3dfa00" name="更改" comment="增加了train中回调函数记录评价指标" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -302,7 +296,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744297303119</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="增加了train中回调函数记录评价指标">
+      <option name="closed" value="true" />
+      <created>1744426850862</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1744426850862</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -331,6 +333,7 @@
     <MESSAGE value="修复了utils中def show_combined_output(img, pred):在pred为空时报错的bug" />
     <MESSAGE value="规范化GUI 合并了train.py" />
     <MESSAGE value="规范化utils" />
-    <option name="LAST_COMMIT_MESSAGE" value="规范化utils" />
+    <MESSAGE value="增加了train中回调函数记录评价指标" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加了train中回调函数记录评价指标" />
   </component>
 </project>
