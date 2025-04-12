@@ -11,14 +11,14 @@ def main():
     x_train, x_test = imageNormalization(x_train, x_test,mean=0.1037, std=0.3081)
 
     # Resize 到 32×32 for LeNet-5
-    # x_train = tf.image.resize(x_train, [32, 32]).numpy()
-    # x_test = tf.image.resize(x_test, [32, 32]).numpy()
+    x_train = tf.image.resize(x_train, [32, 32]).numpy()
+    x_test = tf.image.resize(x_test, [32, 32]).numpy()
 
     print("x_train shape:", x_train.shape)  # (60000, 32, 32, 1)
     print("x_test shape:", x_test.shape)  # (10000, 32, 32, 1)
 
     # ===================== Train / Load Model =====================
-    model_path = "MODEL/cnn_model.h5"
+    model_path = "MODEL/LeNet-5.h5"
 
     # Initialize the CNN model with input shape and model path
     model = CNNModel(x_train.shape[1:], model_path=model_path)
@@ -29,7 +29,7 @@ def main():
         model.train(x_train,y_train,epochs=20,batch_size=32)
         model.save()  # Save the trained model
 
-    model.evaluate(x_test,y_test)
+    NDOCNNacc = model.evaluate(x_test,y_test,save_path="result/LeNet-5_acc.csv")
 
 '''
     # ===================== Pygame Event Loop =====================

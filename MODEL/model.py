@@ -6,6 +6,7 @@ import numpy as np
 from tensorflow.keras.layers import Conv2D, AveragePooling2D, MaxPooling2D, Flatten, Dense, Activation, Dropout
 import os
 import pandas as pd
+from sklearn.metrics import accuracy_score
 
 class SaveEpochMetricsCallback(tf.keras.callbacks.Callback):
     def __init__(self, model_log_path):
@@ -91,27 +92,48 @@ class CNNModel:
             callbacks=[save_callback]
         )
 
-    def evaluate(self, x_test, y_test):
-        # 评估 loss 和 acc
-        test_loss, test_acc = self.model.evaluate(x_test, y_test)
-        print("Test loss on test samples: ", test_loss)
-        print("Validation accuracy: ", test_acc)
+    def evaluate(self, x_test, y_test, n_splits=10, save_path="result/acc.csv"):
+        """
+        Evaluate the model accuracy over n_splits batches of test data,
+        and save the results to a CSV file using pandas.
 
-        # # 获取预测类别（取 argmax）
-        # y_pred_probs = self.model.predict(x_test)
-        # y_pred = np.argmax(y_pred_probs, axis=1)
-        #
-        # # 生成混淆矩阵（假设类别是从 0 到 9）
-        # labels = sorted(list(set(y_test)))
-        # cm = confusion_matrix(y_test, y_pred, labels=labels)
-        #
-        # # 转换为带标签的 DataFrame
-        # df_cm = pd.DataFrame(cm, index=[f"True_{i}" for i in labels],
-        #                      columns=[f"Pred_{i}" for i in labels])
-        #
-        # # 保存到 CSV
-        # df_cm.to_csv("result/confusion_matrix.csv")
-        # print("Confusion matrix saved to result/confusion_matrix.csv")
+        :param x_test: Test images
+        :param y_test: True labels
+        :param n_splits: Number of partitions for evaluation
+        :param save_path: File path to save accuracy list (CSV)
+        :return: List of accuracy scores per partition
+        """
+        batch_size = len(x_test) // n_splits
+        acc_list = []
+
+        for i in range(n_splits):
+            start = i * batch_size
+            end = (i + 1) * batch_size if i != n_splits - 1 else len(x_test)
+
+            x_batch = x_test[start:end]
+            y_batch = y_test[start:end]
+
+            y_pred = self.model.predict(x_batch)
+            y_pred_labels = np.argmax(y_pred, axis=1)
+            y_true_labels = np.argmax(y_batch, axis=1) if y_batch.ndim > 1 else y_batch
+
+            acc = accuracy_score(y_true_labels, y_pred_labels)
+            acc_list.append(acc)
+
+        print("Accuracy for each partition:", acc_list)
+        print("Average accuracy:", np.mean(acc_list))
+
+        # 使用 pandas 保存
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        df = pd.DataFrame({
+            "Partition": np.arange(1, n_splits + 1),
+            "Accuracy": acc_list
+        })
+        df.to_csv(save_path, index=False)
+
+        return acc_list
+
+
 
     def save(self):
         self.model.save(self.model_path)
