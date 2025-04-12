@@ -19,14 +19,10 @@ def main():
 
     # If model is not loaded, compile and train it
     if not model.is_load:
-        model.compile(
-            loss="sparse_categorical_crossentropy",
-            optimizer="adam",
-            metrics=["accuracy"]
-        )
-        model.train(x_train, y_train, epochs=5, validation_split=0.3)
+        model.train(x_train,y_train,epochs=20,validation_split=0.3)
         model.save()  # Save the trained model
 
+'''
     # ===================== Pygame Event Loop =====================
     draw_on = False  # Initialize draw_on variable before the loop
     try:
@@ -78,7 +74,7 @@ def main():
 
     # Quit pygame after the loop ends
     pygame.quit()
-
+'''
 
 # Entry point of the script, checking if this script is being run directly
 if __name__ == "__main__":
