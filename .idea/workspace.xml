@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="864f803e-faba-4351-b45a-a1236c3dfa00" name="更改" comment="增加了train中回调函数记录评价指标" />
+    <list default="true" id="864f803e-faba-4351-b45a-a1236c3dfa00" name="更改" comment="运行得到数据">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUI.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MODEL/cnn_model.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MODEL/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/MODEL/model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/result/epoch_loss_summary.csv" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -304,7 +310,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744426850862</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="运行得到数据">
+      <option name="closed" value="true" />
+      <created>1744427165703</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1744427165703</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -334,6 +348,7 @@
     <MESSAGE value="规范化GUI 合并了train.py" />
     <MESSAGE value="规范化utils" />
     <MESSAGE value="增加了train中回调函数记录评价指标" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加了train中回调函数记录评价指标" />
+    <MESSAGE value="运行得到数据" />
+    <option name="LAST_COMMIT_MESSAGE" value="运行得到数据" />
   </component>
 </project>

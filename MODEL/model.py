@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.models import Sequential, load_model
-from sklearn.model_selection import KFold
+from sklearn.metrics import confusion_matrix
 import numpy as np
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Activation, Dropout
 import os
@@ -90,9 +90,26 @@ class CNNModel:
         self.model.fit(x_train, y_train, epochs=epochs, validation_split=validation_split, callbacks=[save_callback])
 
     def evaluate(self, x_test, y_test):
+        # 评估 loss 和 acc
         test_loss, test_acc = self.model.evaluate(x_test, y_test)
         print("Test loss on test samples: ", test_loss)
         print("Validation accuracy: ", test_acc)
+
+        # 获取预测类别（取 argmax）
+        y_pred_probs = self.model.predict(x_test)
+        y_pred = np.argmax(y_pred_probs, axis=1)
+
+        # 生成混淆矩阵（假设类别是从 0 到 9）
+        labels = sorted(list(set(y_test)))
+        cm = confusion_matrix(y_test, y_pred, labels=labels)
+
+        # 转换为带标签的 DataFrame
+        df_cm = pd.DataFrame(cm, index=[f"True_{i}" for i in labels],
+                             columns=[f"Pred_{i}" for i in labels])
+
+        # 保存到 CSV
+        df_cm.to_csv("result/confusion_matrix.csv")
+        print("Confusion matrix saved to result/confusion_matrix.csv")
 
     def save(self):
         self.model.save(self.model_path)

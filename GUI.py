@@ -22,6 +22,8 @@ def main():
         model.train(x_train,y_train,epochs=20,validation_split=0.3)
         model.save()  # Save the trained model
 
+    model.evaluate(x_test,y_test)
+
 '''
     # ===================== Pygame Event Loop =====================
     draw_on = False  # Initialize draw_on variable before the loop
