@@ -1,14 +1,14 @@
 import tensorflow as tf
 from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras import layers, models
 from tensorflow.keras.optimizers import Adam
-from sklearn.metrics import confusion_matrix
 import numpy as np
 from tensorflow.keras.layers import Conv2D, AveragePooling2D, MaxPooling2D, Flatten, Dense, Activation, Dropout
 import os
 import pandas as pd
 from sklearn.metrics import accuracy_score
 from abc import ABC, abstractmethod
-
+from cpaslayer import CapsLayer
 class SaveEpochMetricsCallback(tf.keras.callbacks.Callback):
     def __init__(self, model_log_path):
         super(SaveEpochMetricsCallback, self).__init__()
@@ -146,10 +146,33 @@ class CNNModel(BaseModel):
         self.model = model
         self.compile()
 
-def get_model(model_type="cnn"):
-    if model_type == "cnn":
-        return CNNModel()
-    # elif model_type == "capsule":
-    #     return CapsuleModel()
-    else:
-        raise ValueError("Unsupported model type")
+class CapsuleModel(BaseModel):
+    label = "CapsuleModel"
+
+    def __init__(self, input_shape, model_path=None):
+        super().__init__(input_shape, model_path)
+
+    def build_model(self, input_shape):
+        inputs = tf.keras.Input(shape=input_shape)
+        # Conv1, return tensor with shape [batch_size, 20, 20, 256]
+        x = layers.Conv2D(256, kernel_size=9, activation='relu')(inputs)
+        # primaryCaps pre-processing
+        x = layers.Conv2D(256, kernel_size=9, strides=2, activation='relu')(x)
+
+        # PrimaryCaps
+        # reshaping, shape： (batch_size, 6*6*32=1152, 8, 1)
+        x = layers.Reshape((-1, 8))(x)  # 每个胶囊维度是8
+        x = self.squash(x)
+
+        # DigitCaps return shape [batch_size, 10, 16, 1]
+        caps_output = CapsLayer(num_capsules=10, dim_capsules=16)(x)
+
+        # Length layer
+        output = tf.keras.layers.Lambda(lambda z: tf.norm(z, axis=-1))(caps_output)
+
+        self.model = models.Model(inputs=inputs, outputs=output)
+
+    def squash(self, x, axis=-1):
+        s_squared_norm = tf.reduce_sum(tf.square(x), axis=axis, keepdims=True)
+        scale = s_squared_norm / (1 + s_squared_norm) / tf.sqrt(s_squared_norm + 1e-9)
+        return scale * x
