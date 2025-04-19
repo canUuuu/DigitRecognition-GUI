@@ -168,6 +168,7 @@ class CapsuleModel(BaseModel):
         caps_output = CapsLayer(num_capsules=10, dim_capsules=16)(x)
 
         # Length layer
+        # 向量的方向表示特征，而**长度（范数）**表示“置信度”或“存在概率”。
         output = tf.keras.layers.Lambda(lambda z: tf.norm(z, axis=-1))(caps_output)
 
         self.model = models.Model(inputs=inputs, outputs=output)
