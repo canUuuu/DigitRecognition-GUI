@@ -48,7 +48,7 @@ class BaseModel(ABC):
         if model_path is None:
             model_path = f"MODEL/{self.label}.h5"
         self.model_path = model_path
-        self.model_log_path = "result/epoch_loss_summary.csv"
+        self.model_log_path = f"result/{self.label}_epoch_loss_summary.csv"
         if os.path.exists(self.model_path):
             print(f"Loading model from {self.model_path}")
             self.model = load_model(self.model_path)

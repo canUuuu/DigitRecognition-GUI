@@ -10,12 +10,12 @@ def main():
     # Normalize and reshape the images to [num_samples, 28, 28, 1]
     x_train, x_test = imageNormalization(x_train, x_test,mean=0.1037, std=0.3081)
 
-    # Resize 到 32×32 for LeNet-5
-    x_train = tf.image.resize(x_train, [32, 32]).numpy()
-    x_test = tf.image.resize(x_test, [32, 32]).numpy()
+    # # Resize 到 32×32 for LeNet-5
+    # x_train = tf.image.resize(x_train, [32, 32]).numpy()
+    # x_test = tf.image.resize(x_test, [32, 32]).numpy()
 
-    print("x_train shape:", x_train.shape)  # (60000, 32, 32, 1)
-    print("x_test shape:", x_test.shape)  # (10000, 32, 32, 1)
+    print("x_train shape:", x_train.shape)  # (60000, 28/32, 29/32, 1)
+    print("x_test shape:", x_test.shape)  # (10000, 28/32, 28/32, 1)
 
     # ===================== Train / Load Model =====================
     model_path = "MODEL/cnn_model.h5"
@@ -29,7 +29,7 @@ def main():
         model.train(x_train,y_train,epochs=20,batch_size=32)
         model.save()  # Save the trained model
 
-    NDOCNNacc = model.evaluate(x_test,y_test,save_path="result/LeNet-5_acc.csv")
+    NDOCNNacc = model.evaluate(x_test,y_test,save_path=f"result/{model.label}_acc.csv")
 
     # ===================== Pygame Event Loop =====================
     draw_on = False  # Initialize draw_on variable before the loop

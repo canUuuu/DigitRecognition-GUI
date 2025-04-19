@@ -130,6 +130,9 @@ def image_refiner(gray):
     # Insert the resized image into the center of the padded image
     padded_image[rowsPadding[0]:rowsPadding[0] + rows, colsPadding[0]:colsPadding[0] + cols] = gray
 
+    # Ensure the image has the correct shape (28, 28, 1)
+    padded_image = np.expand_dims(padded_image, axis=-1)
+
     return padded_image
 
 
@@ -172,8 +175,10 @@ def get_output_image(path, model):
 
             roi = img[y:y + h, x:x + w]
             roi = cv2.bitwise_not(roi)
-            roi = image_refiner(roi)
-            th, fnl = cv2.threshold(roi, 127, 255, cv2.THRESH_BINARY)
+            roi = image_refiner(roi)  # Refine the image
+
+            # Ensure the image is in the correct format (28, 28, 1)
+            roi = np.expand_dims(roi, axis=0)
 
             pred = model.predict_digit(roi)
             pred_list.append(pred)
