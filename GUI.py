@@ -18,7 +18,7 @@ def main():
     print("x_test shape:", x_test.shape)  # (10000, 32, 32, 1)
 
     # ===================== Train / Load Model =====================
-    model_path = "MODEL/LeNet-5.h5"
+    model_path = "MODEL/cnn_model.h5"
 
     # Initialize the CNN model with input shape and model path
     model = CNNModel(x_train.shape[1:], model_path=model_path)
@@ -31,7 +31,6 @@ def main():
 
     NDOCNNacc = model.evaluate(x_test,y_test,save_path="result/LeNet-5_acc.csv")
 
-'''
     # ===================== Pygame Event Loop =====================
     draw_on = False  # Initialize draw_on variable before the loop
     try:
@@ -83,7 +82,7 @@ def main():
 
     # Quit pygame after the loop ends
     pygame.quit()
-'''
+
 
 # Entry point of the script, checking if this script is being run directly
 if __name__ == "__main__":

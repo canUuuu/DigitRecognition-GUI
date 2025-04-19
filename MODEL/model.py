@@ -7,6 +7,7 @@ from tensorflow.keras.layers import Conv2D, AveragePooling2D, MaxPooling2D, Flat
 import os
 import pandas as pd
 from sklearn.metrics import accuracy_score
+from abc import ABC, abstractmethod
 
 class SaveEpochMetricsCallback(tf.keras.callbacks.Callback):
     def __init__(self, model_log_path):
@@ -40,8 +41,12 @@ class SaveEpochMetricsCallback(tf.keras.callbacks.Callback):
 
         # Save the updated DataFrame back to CSV
         self.df.to_csv(self.model_log_path, index=False)
-class CNNModel:
-    def __init__(self, input_shape, model_path="MODEL/cnn_model.h5"):
+
+class BaseModel(ABC):
+    label = "base_model"
+    def __init__(self, input_shape, model_path=None):
+        if model_path is None:
+            model_path = f"MODEL/{self.label}.h5"
         self.model_path = model_path
         self.model_log_path = "result/epoch_loss_summary.csv"
         if os.path.exists(self.model_path):
@@ -53,33 +58,17 @@ class CNNModel:
             self.build_model(input_shape)
             self.is_load = False
 
+    @abstractmethod
     def build_model(self, input_shape):
-        model = Sequential()
-        model.add(Conv2D(32, (3, 3), input_shape=input_shape))
-        model.add(Activation("relu"))
-
-        model.add(Conv2D(64, (3, 3)))
-        model.add(Activation("relu"))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-
-        model.add(Dropout(0.25))
-
-        model.add(Flatten())
-        model.add(Dense(128))
-        model.add(Activation("relu"))
-
-        model.add(Dropout(0.5))
-        model.add(Dense(10))
-        model.add(Activation("softmax"))
-        self.model = model
-        self.compile()
-
-    def summary(self):
-        self.model.summary()
+        """子类需要实现具体模型结构"""
+        pass
 
     def compile(self, loss="sparse_categorical_crossentropy", learning_rate=0.001, metrics=["accuracy"]):
         optimizer = Adam(learning_rate=learning_rate)
         self.model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
+
+    def summary(self):
+        self.model.summary()
 
     def train(self, x_train, y_train, epochs=5, validation_split=0, batch_size=32):
         save_callback = SaveEpochMetricsCallback(self.model_log_path)
@@ -93,16 +82,6 @@ class CNNModel:
         )
 
     def evaluate(self, x_test, y_test, n_splits=10, save_path="result/acc.csv"):
-        """
-        Evaluate the model accuracy over n_splits batches of test data,
-        and save the results to a CSV file using pandas.
-
-        :param x_test: Test images
-        :param y_test: True labels
-        :param n_splits: Number of partitions for evaluation
-        :param save_path: File path to save accuracy list (CSV)
-        :return: List of accuracy scores per partition
-        """
         batch_size = len(x_test) // n_splits
         acc_list = []
 
@@ -123,7 +102,6 @@ class CNNModel:
         print("Accuracy for each partition:", acc_list)
         print("Average accuracy:", np.mean(acc_list))
 
-        # 使用 pandas 保存
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
         df = pd.DataFrame({
             "Partition": np.arange(1, n_splits + 1),
@@ -133,8 +111,6 @@ class CNNModel:
 
         return acc_list
 
-
-
     def save(self):
         self.model.save(self.model_path)
         print(f"Model saved at {self.model_path}")
@@ -142,5 +118,38 @@ class CNNModel:
 
     def predict_digit(self, img):
         test_image = img.reshape(-1, 28, 28, 1)
-        # return np.argmax(self.model.predict(test_image))
         return self.model.predict(test_image)
+class CNNModel(BaseModel):
+    label = "cnn"
+    def __init__(self, input_shape, model_path=None):
+        super().__init__(input_shape, model_path)
+
+    def build_model(self, input_shape):
+        model = Sequential()
+        model.add(Conv2D(32, (3, 3), input_shape=input_shape))
+        model.add(Activation("relu"))
+
+        model.add(Conv2D(64, (3, 3)))
+        model.add(Activation("relu"))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(Dropout(0.25))
+
+        model.add(Flatten())
+        model.add(Dense(128))
+        model.add(Activation("relu"))
+
+        model.add(Dropout(0.5))
+        model.add(Dense(10))
+        model.add(Activation("softmax"))
+
+        self.model = model
+        self.compile()
+
+def get_model(model_type="cnn"):
+    if model_type == "cnn":
+        return CNNModel()
+    # elif model_type == "capsule":
+    #     return CapsuleModel()
+    else:
+        raise ValueError("Unsupported model type")
