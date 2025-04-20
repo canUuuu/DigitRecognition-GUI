@@ -24,7 +24,7 @@ class CapsLayer(tf.keras.layers.Layer):
         # ->(batch, 6*6*32, 10, 8)
         inputs_tiled = tf.tile(inputs_expand, [1, 1, self.num_capsules, 1])
         # u_hat_ij = W_ij · u_i → 预测输出(batch_size,6*6*32, 10, 16)
-        inputs_hat = tf.einsum('bijh,hk->bijk', inputs_tiled, self.W)
+        inputs_hat = tf.einsum('bijh,ijhd->bijd', inputs_tiled, self.W)
 
         b = tf.zeros_like(inputs_hat[:, :, :, 0])
         # return output[batch_size , 10, 16]

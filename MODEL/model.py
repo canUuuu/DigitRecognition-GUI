@@ -8,7 +8,7 @@ import os
 import pandas as pd
 from sklearn.metrics import accuracy_score
 from abc import ABC, abstractmethod
-from cpaslayer import CapsLayer
+from MODEL.capslayer import CapsLayer
 class SaveEpochMetricsCallback(tf.keras.callbacks.Callback):
     def __init__(self, model_log_path):
         super(SaveEpochMetricsCallback, self).__init__()
@@ -146,23 +146,52 @@ class CNNModel(BaseModel):
         self.model = model
         self.compile()
 
+
 class CapsuleModel(BaseModel):
     label = "CapsuleModel"
 
     def __init__(self, input_shape, model_path=None):
         super().__init__(input_shape, model_path)
 
+    @staticmethod
+    def margin_loss(y_true, y_pred):
+        """
+        Margin loss for Capsule Networks.
+
+        :param y_true: One-hot labels, shape [batch_size, num_classes]
+        :param y_pred: Probabilities from capsule layer, shape [batch_size, num_classes]
+        :return: Scalar loss
+        """
+        m_plus = 0.9
+        m_minus = 0.1
+        lambda_val = 0.5
+
+        # Ensure y_true and y_pred have the same batch size and num_classes
+        y_true = tf.cast(y_true, tf.float32)  # Ensure y_true is float32
+
+        # Calculate margin loss
+        L = y_true * tf.square(tf.maximum(0., m_plus - y_pred)) + \
+            lambda_val * (1 - y_true) * tf.square(tf.maximum(0., y_pred - m_minus))
+
+        return tf.reduce_mean(tf.reduce_sum(L, axis=1))
+
+    def compile(self, learning_rate=0.001, metrics=["accuracy"]):
+        optimizer = Adam(learning_rate=learning_rate)
+        self.model.compile(loss=self.margin_loss, optimizer=optimizer, metrics=metrics)
+
     def build_model(self, input_shape):
         inputs = tf.keras.Input(shape=input_shape)
+
         # Conv1, return tensor with shape [batch_size, 20, 20, 256]
         x = layers.Conv2D(256, kernel_size=9, activation='relu')(inputs)
-        # primaryCaps pre-processing
+
+        # PrimaryCaps pre-processing
         x = layers.Conv2D(256, kernel_size=9, strides=2, activation='relu')(x)
 
         # PrimaryCaps
-        # reshaping, shape： (batch_size, 6*6*32=1152, 8, 1)
+        # reshaping, shape: (batch_size, 6*6*32=1152, 8, 1)
         x = layers.Reshape((-1, 8))(x)  # 每个胶囊维度是8
-        x = self.squash(x)
+        x = tf.keras.layers.Lambda(self.squash)(x)
 
         # DigitCaps return shape [batch_size, 10, 16, 1]
         caps_output = CapsLayer(num_capsules=10, dim_capsules=16)(x)
@@ -173,7 +202,13 @@ class CapsuleModel(BaseModel):
 
         self.model = models.Model(inputs=inputs, outputs=output)
 
+        # Immediately compile after building
+        self.compile()
+
     def squash(self, x, axis=-1):
         s_squared_norm = tf.reduce_sum(tf.square(x), axis=axis, keepdims=True)
         scale = s_squared_norm / (1 + s_squared_norm) / tf.sqrt(s_squared_norm + 1e-9)
         return scale * x
+
+
+

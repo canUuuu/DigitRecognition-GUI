@@ -7,7 +7,7 @@ import pygame
 import io
 import os
 
-from MODEL.model import CNNModel
+
 # ===================== global configuration ===================== #
 IMG_SIZE = 28
 # :para black: RGB value for black color used in drawing and UI elements.

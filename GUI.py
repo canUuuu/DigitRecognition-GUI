@@ -1,6 +1,6 @@
 from utils import *
 import tensorflow as tf
-
+from MODEL.model import *
 def main():
     # ===================== Preparation =====================
     # Load the MNIST dataset from local Keras storage
@@ -8,20 +8,23 @@ def main():
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
     # Normalize and reshape the images to [num_samples, 28, 28, 1]
-    x_train, x_test = imageNormalization(x_train, x_test,mean=0.1037, std=0.3081)
+    x_train, x_test = imageNormalization(x_train, x_test, mean=0.1037, std=0.3081)
 
-    # # Resize 到 32×32 for LeNet-5
-    # x_train = tf.image.resize(x_train, [32, 32]).numpy()
-    # x_test = tf.image.resize(x_test, [32, 32]).numpy()
+    # Convert the labels to one-hot encoding
+    y_train = tf.keras.utils.to_categorical(y_train, 10)  # 10 classes
+    y_test = tf.keras.utils.to_categorical(y_test, 10)    # 10 classes
 
-    print("x_train shape:", x_train.shape)  # (60000, 28/32, 29/32, 1)
-    print("x_test shape:", x_test.shape)  # (10000, 28/32, 28/32, 1)
+    print("x_train shape:", x_train.shape)  # (60000, 28, 28, 1)
+    print("x_test shape:", x_test.shape)    # (10000, 28, 28, 1)
+    print("y_train shape:", y_train.shape)  # (60000, 10)
+    print("y_test shape:", y_test.shape)    # (10000, 10)
 
     # ===================== Train / Load Model =====================
-    model_path = "MODEL/cnn_model.h5"
+    # model_path = "MODEL/cnn_model.h5"
 
     # Initialize the CNN model with input shape and model path
-    model = CNNModel(x_train.shape[1:], model_path=model_path)
+    # model = CNNModel(x_train.shape[1:], model_path=model_path)
+    model = CapsuleModel(x_train.shape[1:])
     model.summary()
 
     # If model is not loaded, compile and train it
