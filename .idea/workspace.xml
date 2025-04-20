@@ -4,13 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="864f803e-faba-4351-b45a-a1236c3dfa00" name="更改" comment="增加了cpsmodel">
-      <change afterPath="$PROJECT_DIR$/MODEL/CUDA_test.py" afterDir="false" />
+    <list default="true" id="864f803e-faba-4351-b45a-a1236c3dfa00" name="更改" comment="增加了cuda test">
+      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ASSETS/Fig.png" beforeDir="false" afterPath="$PROJECT_DIR$/ASSETS/Fig.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ASSETS/out.png" beforeDir="false" afterPath="$PROJECT_DIR$/ASSETS/out.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GUI.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MODEL/cpaslayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/MODEL/capslayer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MODEL/capslayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/MODEL/capslayer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MODEL/cnn_model.h5" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/MODEL/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/MODEL/model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/result/CapsuleModel_epoch_loss_summary.csv" beforeDir="false" afterPath="$PROJECT_DIR$/result/CapsuleModel_epoch_loss_summary.csv" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,18 +40,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.GUI.executor&quot;: &quot;Run&quot;,
-    &quot;Python.fff.executor&quot;: &quot;Run&quot;,
-    &quot;Python.loadMNIST.executor&quot;: &quot;Run&quot;,
-    &quot;Python.utils.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/download/CapsNet-Tensorflow-master&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.GUI.executor": "Run",
+    "Python.capslayer.executor": "Run",
+    "Python.fff.executor": "Run",
+    "Python.loadMNIST.executor": "Run",
+    "Python.test.executor": "Run",
+    "Python.utils.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "D:/download/CapsNet-Tensorflow-master"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\app\pycharm\python project\DigitRecognition\MODEL" />
@@ -59,7 +64,7 @@
       <recent name="D:\app\pycharm\python project\DigitRecognition" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.CUDA_test">
+  <component name="RunManager" selected="Python.GUI">
     <configuration name="CUDA_test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DigitRecognition" />
       <option name="ENV_FILES" value="" />
@@ -97,6 +102,50 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/GUI.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="capslayer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DigitRecognition" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/MODEL" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MODEL/capslayer.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DigitRecognition" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -153,11 +202,15 @@
     <list>
       <item itemvalue="Python.train" />
       <item itemvalue="Python.GUI" />
+      <item itemvalue="Python.capslayer" />
+      <item itemvalue="Python.test" />
       <item itemvalue="Python.CUDA_test" />
       <item itemvalue="Python.utils" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.capslayer" />
         <item itemvalue="Python.CUDA_test" />
         <item itemvalue="Python.utils" />
       </list>
@@ -427,7 +480,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745038704069</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="增加了cuda test">
+      <option name="closed" value="true" />
+      <created>1745108695527</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1745108695527</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -464,6 +525,7 @@
     <MESSAGE value="定义了模型父类, 在GUI过程中u才能在问题" />
     <MESSAGE value="修改了输入图像被resize成32 , 成功运行GUI" />
     <MESSAGE value="增加了cpsmodel" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加了cpsmodel" />
+    <MESSAGE value="增加了cuda test" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加了cuda test" />
   </component>
 </project>

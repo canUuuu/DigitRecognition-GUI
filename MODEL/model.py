@@ -44,14 +44,17 @@ class SaveEpochMetricsCallback(tf.keras.callbacks.Callback):
 
 class BaseModel(ABC):
     label = "base_model"
-    def __init__(self, input_shape, model_path=None):
+
+    def __init__(self, input_shape, model_path=None, custom_objects=None):
         if model_path is None:
             model_path = f"MODEL/{self.label}.h5"
         self.model_path = model_path
         self.model_log_path = f"result/{self.label}_epoch_loss_summary.csv"
         if os.path.exists(self.model_path):
             print(f"Loading model from {self.model_path}")
-            self.model = load_model(self.model_path)
+            # 这里传入 custom_objects
+            print((custom_objects))
+            self.model = load_model(self.model_path, custom_objects=custom_objects)
             self.is_load = True
         else:
             print("Creating a new model")
@@ -81,6 +84,11 @@ class BaseModel(ABC):
             callbacks=[save_callback]
         )
 
+    import os
+    import pandas as pd
+    import numpy as np
+    from sklearn.metrics import accuracy_score
+
     def evaluate(self, x_test, y_test, n_splits=10, save_path="result/acc.csv"):
         batch_size = len(x_test) // n_splits
         acc_list = []
@@ -107,7 +115,12 @@ class BaseModel(ABC):
             "Partition": np.arange(1, n_splits + 1),
             "Accuracy": acc_list
         })
-        df.to_csv(save_path, index=False)
+
+        # 判断是否是第一次写入
+        if not os.path.exists(save_path):
+            df.to_csv(save_path, index=False)
+        else:
+            df.to_csv(save_path, mode='a', header=False, index=False)
 
         return acc_list
 
@@ -120,30 +133,37 @@ class BaseModel(ABC):
         test_image = img.reshape(-1, 28, 28, 1)
         return self.model.predict(test_image)
 class CNNModel(BaseModel):
-    label = "cnn"
+    label = "cnn_model"
     def __init__(self, input_shape, model_path=None):
         super().__init__(input_shape, model_path)
 
+    def compile(self, learning_rate=0.001):
+        """
+        Override compile to use categorical_crossentropy for one-hot encoded labels.
+
+        :param learning_rate: Learning rate for the Adam optimizer.
+        """
+        optimizer = Adam(learning_rate=learning_rate)
+        self.model.compile(
+            loss="categorical_crossentropy",  # 注意这里用的是 categorical_crossentropy
+            optimizer=optimizer,
+            metrics=["accuracy"]
+        )
+
     def build_model(self, input_shape):
-        model = Sequential()
-        model.add(Conv2D(32, (3, 3), input_shape=input_shape))
-        model.add(Activation("relu"))
+        inputs = tf.keras.Input(shape=input_shape)
 
-        model.add(Conv2D(64, (3, 3)))
-        model.add(Activation("relu"))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
+        x = Conv2D(32, (3, 3), activation='relu')(inputs)
+        x = Conv2D(64, (3, 3), activation='relu')(x)
+        x = MaxPooling2D(pool_size=(2, 2))(x)
+        x = Dropout(0.25)(x)
 
-        model.add(Dropout(0.25))
+        x = Flatten()(x)
+        x = Dense(128, activation='relu')(x)
+        x = Dropout(0.5)(x)
+        outputs = Dense(10, activation='softmax')(x)
 
-        model.add(Flatten())
-        model.add(Dense(128))
-        model.add(Activation("relu"))
-
-        model.add(Dropout(0.5))
-        model.add(Dense(10))
-        model.add(Activation("softmax"))
-
-        self.model = model
+        self.model = tf.keras.Model(inputs=inputs, outputs=outputs)
         self.compile()
 
 
@@ -151,7 +171,9 @@ class CapsuleModel(BaseModel):
     label = "CapsuleModel"
 
     def __init__(self, input_shape, model_path=None):
-        super().__init__(input_shape, model_path)
+        # 加载模型时传入 CapsLayer
+        custom_objects = {'CapsLayer': CapsLayer}
+        super().__init__(input_shape, model_path, custom_objects=custom_objects)
 
     @staticmethod
     def margin_loss(y_true, y_pred):

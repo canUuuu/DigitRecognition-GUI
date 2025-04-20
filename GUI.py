@@ -24,7 +24,7 @@ def main():
 
     # Initialize the CNN model with input shape and model path
     # model = CNNModel(x_train.shape[1:], model_path=model_path)
-    model = CapsuleModel(x_train.shape[1:])
+    model = CNNModel(x_train.shape[1:])
     model.summary()
 
     # If model is not loaded, compile and train it
