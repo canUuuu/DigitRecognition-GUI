@@ -18,22 +18,22 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "1"
 
 import argparse
 from datetime import datetime
-from constructs.loops import Loops
-from constructs.output import Output
-from constructs.optimizer import Adam
-from constructs.metrics import Metrics
-from constructs.loggable import Loggable
-from constructs.ema_weights import EMAWeights
-from constructs.loss import MeanSquaredError
-from constructs.loss import CategoricalCrossEntropy
-from constructs.loss import MarginPlusMeanSquaredError
-from constructs.loss import CategoricalCrossEntropyPlusMeanSquaredError
-from constructs.learning_rate import ManualExponentialDecay
-from input.MNIST_input_pipeline import MNIST
-from input.cifar10_input_pipeline import Cifar10
-from input.cifar100_input_pipeline import Cifar100
-from input.smallNORB_input_pipeline import smallNORB
-from models.SmallImageBranchingMerging import SmallImageBranchingMerging
+from python.constructs.loops import Loops
+from python.constructs.output import Output
+from python.constructs.optimizer import Adam
+from python.constructs.metrics import Metrics
+from python.constructs.loggable import Loggable
+from python.constructs.ema_weights import EMAWeights
+from python.constructs.loss import MeanSquaredError
+from python.constructs.loss import CategoricalCrossEntropy
+from python.constructs.loss import MarginPlusMeanSquaredError
+from python.constructs.loss import CategoricalCrossEntropyPlusMeanSquaredError
+from python.constructs.learning_rate import ManualExponentialDecay
+from python.input.MNIST_input_pipeline import MNIST
+from python.input.cifar10_input_pipeline import Cifar10
+from python.input.cifar100_input_pipeline import Cifar100
+from python.input.smallNORB_input_pipeline import smallNORB
+from python.models.SmallImageBranchingMerging import SmallImageBranchingMerging
 import tensorflow as tf
 
 
