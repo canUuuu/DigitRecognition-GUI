@@ -4,16 +4,38 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="864f803e-faba-4351-b45a-a1236c3dfa00" name="更改" comment="增加了cuda test">
-      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+    <list default="true" id="864f803e-faba-4351-b45a-a1236c3dfa00" name="更改" comment="修改了baseline使用one hot编码 修改了complie">
+      <change afterPath="$PROJECT_DIR$/MODEL/python/constructs/ema_weights.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/constructs/learning_rate.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/constructs/loggable.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/constructs/loops.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/constructs/loss.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/constructs/metrics.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/constructs/optimizer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/constructs/output.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/etc/count_vars.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/etc/ensemble_evaluations.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/etc/extract_final_branch_weights.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/etc/extract_scalars_from_logs.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/etc/extract_smallNORB_training_samples.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/etc/plot_final_branch_weights.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/etc/produce_MNIST_eval_digits.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/etc/segregate_weight_types.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/input/MNIST_input_pipeline.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/input/cifar100_input_pipeline.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/input/cifar10_input_pipeline.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/input/cifar_input_pipeline.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/input/input_pipeline_base.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/input/smallNORB_input_pipeline.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/models/SmallImageBranchingMerging.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/models/nn_ops.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/models/variable.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/perturbations.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/reconstruct.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/run_experiments.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MODEL/python/train.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ASSETS/Fig.png" beforeDir="false" afterPath="$PROJECT_DIR$/ASSETS/Fig.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ASSETS/out.png" beforeDir="false" afterPath="$PROJECT_DIR$/ASSETS/out.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUI.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MODEL/capslayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/MODEL/capslayer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MODEL/cnn_model.h5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MODEL/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/MODEL/model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/CapsuleModel_epoch_loss_summary.csv" beforeDir="false" afterPath="$PROJECT_DIR$/result/CapsuleModel_epoch_loss_summary.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fig.opju" beforeDir="false" afterPath="$PROJECT_DIR$/fig.opju" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +64,8 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Python.GUI.executor": "Run",
+    "Python.GUI.executor": "Debug",
+    "Python.NotroutingCaps.executor": "Run",
     "Python.capslayer.executor": "Run",
     "Python.fff.executor": "Run",
     "Python.loadMNIST.executor": "Run",
@@ -51,7 +74,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "D:/download/CapsNet-Tensorflow-master"
+    "last_opened_file_path": "D:/app/pycharm/python project/DigitRecognition/MODEL/python"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -64,7 +87,7 @@
       <recent name="D:\app\pycharm\python project\DigitRecognition" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.GUI">
+  <component name="RunManager" selected="Python.NotroutingCaps">
     <configuration name="CUDA_test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DigitRecognition" />
       <option name="ENV_FILES" value="" />
@@ -87,7 +110,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="GUI" type="PythonConfigurationType" factoryName="Python">
+    <configuration name="NotroutingCaps" type="PythonConfigurationType" factoryName="Python">
       <module name="DigitRecognition" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -97,11 +120,11 @@
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="SDK_NAME" value="DigitRecognition" />
-      <option name="WORKING_DIRECTORY" value="D:\app\pycharm\python project\DigitRecognition" />
+      <option name="WORKING_DIRECTORY" value="D:\app\pycharm\python project\DigitRecognition\MODEL\python" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/GUI.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MODEL/python/train.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -201,7 +224,7 @@
     </configuration>
     <list>
       <item itemvalue="Python.train" />
-      <item itemvalue="Python.GUI" />
+      <item itemvalue="Python.NotroutingCaps" />
       <item itemvalue="Python.capslayer" />
       <item itemvalue="Python.test" />
       <item itemvalue="Python.CUDA_test" />
