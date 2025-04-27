@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="864f803e-faba-4351-b45a-a1236c3dfa00" name="更改" comment="修改了train的启动路径, python目录放在项目根目录" />
+    <list default="true" id="864f803e-faba-4351-b45a-a1236c3dfa00" name="更改" comment="问题在train中应该选择mnist数据集 不是那个mat文件的smallNORB 数据集">
+      <change afterPath="$PROJECT_DIR$/data/t10k-images-idx3-ubyte.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/t10k-labels-idx1-ubyte.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/train-images-idx3-ubyte.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/train-labels-idx1-ubyte.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/unzip.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/input/MNIST_input_pipeline.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/input/MNIST_input_pipeline.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/train.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,10 +44,13 @@
     "Python.GUI.executor": "Debug",
     "Python.NotroutingCaps.executor": "Run",
     "Python.capslayer.executor": "Run",
+    "Python.checkdata (1).executor": "Run",
+    "Python.checkdata.executor": "Run",
     "Python.fff.executor": "Run",
     "Python.loadMNIST.executor": "Run",
     "Python.test.executor": "Run",
     "Python.train (1).executor": "Run",
+    "Python.unzip.executor": "Run",
     "Python.utils.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -53,12 +65,13 @@
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\app\pycharm\python project\DigitRecognition" />
+      <recent name="D:\app\pycharm\python project\DigitRecognition\data" />
       <recent name="D:\app\pycharm\python project\DigitRecognition\ASSETS" />
       <recent name="D:\app\pycharm\python project\DigitRecognition\MODEL" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.train (1)">
-    <configuration name="CUDA_test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.unzip">
+    <configuration name="checkdata (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DigitRecognition" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -67,11 +80,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/MODEL" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="D:\app\pycharm\python project\DigitRecognition\MODEL\CUDA_test.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/checkdata.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -80,7 +93,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="capslayer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="checkdata" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DigitRecognition" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -89,11 +102,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/MODEL" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/data" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MODEL/capslayer.py" />
+      <option name="SCRIPT_NAME" value="D:\app\pycharm\python project\DigitRecognition\checkdata.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -169,7 +182,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="utils" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="unzip" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DigitRecognition" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -178,11 +191,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/data" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/utils.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/data/unzip.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -193,19 +206,19 @@
     </configuration>
     <list>
       <item itemvalue="Python.train" />
+      <item itemvalue="Python.checkdata" />
+      <item itemvalue="Python.checkdata (1)" />
+      <item itemvalue="Python.unzip" />
       <item itemvalue="Python.train (1)" />
-      <item itemvalue="Python.capslayer" />
       <item itemvalue="Python.test" />
-      <item itemvalue="Python.CUDA_test" />
-      <item itemvalue="Python.utils" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.unzip" />
         <item itemvalue="Python.train (1)" />
+        <item itemvalue="Python.checkdata (1)" />
+        <item itemvalue="Python.checkdata" />
         <item itemvalue="Python.test" />
-        <item itemvalue="Python.capslayer" />
-        <item itemvalue="Python.CUDA_test" />
-        <item itemvalue="Python.utils" />
       </list>
     </recent_temporary>
   </component>
@@ -513,7 +526,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745634571231</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="问题在train中应该选择mnist数据集 不是那个mat文件的smallNORB 数据集">
+      <option name="closed" value="true" />
+      <created>1745634733505</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1745634733505</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -528,7 +549,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="imageNor" />
     <MESSAGE value="model" />
     <MESSAGE value="save model to MODEL" />
     <MESSAGE value="修改了GUI的process_image 增加到utilis中" />
@@ -553,6 +573,7 @@
     <MESSAGE value="增加了cuda test" />
     <MESSAGE value="修改了train的启动路径" />
     <MESSAGE value="修改了train的启动路径, python目录放在项目根目录" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改了train的启动路径, python目录放在项目根目录" />
+    <MESSAGE value="问题在train中应该选择mnist数据集 不是那个mat文件的smallNORB 数据集" />
+    <option name="LAST_COMMIT_MESSAGE" value="问题在train中应该选择mnist数据集 不是那个mat文件的smallNORB 数据集" />
   </component>
 </project>

@@ -38,7 +38,11 @@ class MNIST(InputPipelineBase):
                                         "t10k-images-idx3-ubyte")
         self._validation_labels_file = os.path.join(data_base_dir,
                                         "t10k-labels-idx1-ubyte")
-
+        # 打印数据路径
+        print(f"Training images file: {self._training_images_file}")
+        print(f"Training labels file: {self._training_labels_file}")
+        print(f"Validation images file: {self._validation_images_file}")
+        print(f"Validation labels file: {self._validation_labels_file}")
     def get_image_size(self):
         return self.IMG_SIZE
 
@@ -76,15 +80,19 @@ class MNIST(InputPipelineBase):
         return dataset.prefetch(-1)
 
     def _load_dataset(self, image_file, label_file):
-        imagedataset = tf.data.FixedLengthRecordDataset(image_file,
-            self.IMG_SIZE * self.IMG_SIZE, header_bytes=16)
-        imagedataset = imagedataset.map(self._read_image,
-            num_parallel_calls=self.PARALLEL_INPUT_CALLS)
-        labelsdataset = tf.data.FixedLengthRecordDataset(
-            label_file, 1, header_bytes=8)
-        labelsdataset = labelsdataset.map(self._read_label,
-            num_parallel_calls=self.PARALLEL_INPUT_CALLS)
-        dataset = tf.data.Dataset.zip((imagedataset, labelsdataset))
+        # 使用 tf.io.read_file 直接读取文件
+        image_file_content = tf.io.read_file(image_file)
+        label_file_content = tf.io.read_file(label_file)
+
+        # 解压并解析图片数据
+        image_dataset = tf.io.decode_raw(image_file_content, tf.uint8)
+        image_dataset = tf.reshape(image_dataset, [-1, self.IMG_SIZE, self.IMG_SIZE, self.IMG_CHANNELS])
+
+        # 解压并解析标签数据
+        label_dataset = tf.io.decode_raw(label_file_content, tf.uint8)
+        label_dataset = tf.reshape(label_dataset, [-1])
+
+        dataset = tf.data.Dataset.from_tensor_slices((image_dataset, label_dataset))
         return dataset
 
     def _read_image(self, tf_bytestring):

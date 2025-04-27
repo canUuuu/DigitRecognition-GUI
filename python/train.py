@@ -94,11 +94,12 @@ def go(run_name, end_epoch, data_dir, input_pipeline, log_dir,
 # Entry point
 ################################################################################
 if __name__ == "__main__":
+
     p = argparse.ArgumentParser()
     p.add_argument("--run_name", default=None)
     p.add_argument("--end_epoch", default=300, type=int)
-    p.add_argument("--data_dir", default=r"../../../Datasets/smallNORB_data")
-    p.add_argument("--input_pipeline", default=5, type=int)
+    p.add_argument("--data_dir", default=r"../data")
+    p.add_argument("--input_pipeline", default=0, type=int)
     p.add_argument("--log_dir", default="../logs")
     p.add_argument("--batch_size", default=120, type=int)
     p.add_argument("--merge_strategy", default=2, type=float)
