@@ -163,6 +163,44 @@ class BaseModel(ABC):
     def predict_digit(self, img):
         test_image = img.reshape(-1, 28, 28, 1)
         return self.model.predict(test_image)
+
+class LeNet5(BaseModel):
+    label = "LeNet-5"
+
+    def __init__(self, input_shape, model_path=None):
+        super().__init__(input_shape, model_path)
+    def predict_digit(self, img):
+        test_image = img.reshape(-1, 32, 32, 1)
+        return self.model.predict(test_image)
+    def build_model(self, input_shape):
+        model = Sequential()
+
+        # C1 - Convolutional Layer
+        model.add(Conv2D(filters=6, kernel_size=(5, 5), activation='relu', input_shape=input_shape))
+
+        # S2 - Subsampling Layer (Average Pooling)
+        model.add(AveragePooling2D(pool_size=(2, 2)))
+
+        # C3 - Convolutional Layer
+        model.add(Conv2D(filters=16, kernel_size=(5, 5), activation='relu'))
+
+        # S4 - Subsampling Layer (Average Pooling)
+        model.add(AveragePooling2D(pool_size=(2, 2)))
+
+        # Flatten
+        model.add(Flatten())
+
+        # C5 - Fully Connected Layer
+        model.add(Dense(120, activation='relu'))
+
+        # F6 - Fully Connected Layer
+        model.add(Dense(84, activation='relu'))
+
+        # Output Layer
+        model.add(Dense(10, activation='softmax'))
+
+        self.model = model
+        self.compile()
 class CNNModel(BaseModel):
     label = "cnn_model"
     def __init__(self, input_shape, model_path=None):

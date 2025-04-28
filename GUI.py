@@ -9,10 +9,12 @@ def main():
 
     # Normalize and reshape the images to [num_samples, 28, 28, 1]
     x_train, x_test = imageNormalization(x_train, x_test, mean=0.1037, std=0.3081)
-
-    # Convert the labels to one-hot encoding
-    y_train = tf.keras.utils.to_categorical(y_train, 10)  # 10 classes
-    y_test = tf.keras.utils.to_categorical(y_test, 10)    # 10 classes
+    # Resize 到 32×32 for LeNet-5
+    x_train = tf.image.resize(x_train, [32, 32]).numpy()
+    x_test = tf.image.resize(x_test, [32, 32]).numpy()
+    # Convert the labels to one-hot encoding　only　caps　need
+    # y_train = tf.keras.utils.to_categorical(y_train, 10)  # 10 classes
+    # y_test = tf.keras.utils.to_categorical(y_test, 10)    # 10 classes
 
     print("x_train shape:", x_train.shape)  # (60000, 28, 28, 1)
     print("x_test shape:", x_test.shape)    # (10000, 28, 28, 1)
@@ -24,7 +26,7 @@ def main():
 
     # Initialize the CNN model with input shape and model path
     # model = CNNModel(x_train.shape[1:], model_path=model_path)
-    model = CapsuleModel(x_train.shape[1:])
+    model = LeNet5(x_train.shape[1:])
     model.summary()
 
     # If model is not loaded, compile and train it

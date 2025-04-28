@@ -176,6 +176,9 @@ def get_output_image(path, model):
             roi = img[y:y + h, x:x + w]
             roi = cv2.bitwise_not(roi)
             roi = image_refiner(roi)  # Refine the image
+            # 如果是LeNet-5模型，resize到32×32
+            if model.label == "LeNet-5":
+                roi = cv2.resize(roi, (32, 32))
 
             # Ensure the image is in the correct format (28, 28, 1)
             roi = np.expand_dims(roi, axis=0)
