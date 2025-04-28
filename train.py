@@ -26,11 +26,11 @@ def main():
             optimizer="adam",
             metrics=["accuracy"]
         )
-        model.train(x_train, y_train, epochs=5, validation_split=0.3)
-        model.save()  # Save the trained model
+        model.train(x_train, y_train, epochs=300, x_test=x_test, y_test=y_test)
+        # model.save()  # Save the trained model
 
     # Evaluate the model on the test set
-    model.evaluate(x_test, y_test)
+    # model.evaluate(x_test, y_test)
     # ===================== Train / Load Model =====================
 
 # Entry point of the script

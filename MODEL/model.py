@@ -9,38 +9,41 @@ import pandas as pd
 from sklearn.metrics import accuracy_score
 from abc import ABC, abstractmethod
 from MODEL.capslayer import CapsLayer
+
+
 class SaveEpochMetricsCallback(tf.keras.callbacks.Callback):
-    def __init__(self, model_log_path):
+    def __init__(self, test_loss_log_path, test_acc_log_path):
         super(SaveEpochMetricsCallback, self).__init__()
-        self.model_log_path = model_log_path
-        if os.path.exists(self.model_log_path):
-            # If file exists, read the CSV to append data
-            self.df = pd.read_csv(self.model_log_path)
-        else:
-            # If the file doesn't exist, initialize a new DataFrame
-            self.df = pd.DataFrame(columns=["epoch", "train_loss", "val_loss", "train_accuracy", "val_accuracy"])
+        self.test_loss_log_path = test_loss_log_path
+        self.test_acc_log_path = test_acc_log_path
+
+        # Initialize empty DataFrame for test loss and test accuracy logs
+        self.test_loss_df = pd.DataFrame(columns=["epoch", "test_loss"])
+        self.test_acc_df = pd.DataFrame(columns=["epoch", "test_accuracy"])
 
     def on_epoch_end(self, epoch, logs=None):
-        # Get metrics at the end of each epoch
-        train_loss = logs.get('loss')
-        val_loss = logs.get('val_loss')
-        train_accuracy = logs.get('accuracy')
-        val_accuracy = logs.get('val_accuracy')
+        # Get test metrics at the end of each epoch
+        test_loss = logs.get('val_loss')
+        test_accuracy = logs.get('val_accuracy')
 
-        # Create a new DataFrame for the new row
-        new_row = pd.DataFrame({
+        # Append the new data to the DataFrame
+        new_test_loss_row = pd.DataFrame({
             "epoch": [epoch + 1],  # Epochs are 0-indexed in TensorFlow/Keras
-            "train_loss": [train_loss],
-            "val_loss": [val_loss],
-            "train_accuracy": [train_accuracy],
-            "val_accuracy": [val_accuracy]
+            "test_loss": [test_loss]
+        })
+        new_test_acc_row = pd.DataFrame({
+            "epoch": [epoch + 1],
+            "test_accuracy": [test_accuracy]
         })
 
-        # Use pd.concat to append the new row to the existing DataFrame
-        self.df = pd.concat([self.df, new_row], ignore_index=True)
+        # Append the rows to the corresponding DataFrame
+        self.test_loss_df = pd.concat([self.test_loss_df, new_test_loss_row], ignore_index=True)
+        self.test_acc_df = pd.concat([self.test_acc_df, new_test_acc_row], ignore_index=True)
 
-        # Save the updated DataFrame back to CSV
-        self.df.to_csv(self.model_log_path, index=False)
+        # Save the updated DataFrames to CSV files
+        self.test_loss_df.to_csv(self.test_loss_log_path, index=False)
+        self.test_acc_df.to_csv(self.test_acc_log_path, index=False)
+
 
 class BaseModel(ABC):
     label = "base_model"
@@ -49,7 +52,11 @@ class BaseModel(ABC):
         if model_path is None:
             model_path = f"MODEL/{self.label}.h5"
         self.model_path = model_path
-        self.model_log_path = f"result/{self.label}_epoch_loss_summary.csv"
+
+        # Initialize the file paths with suffixes
+        self.test_loss_log_path = f"result/{self.label}_test_loss.csv"
+        self.test_acc_log_path = f"result/{self.label}_test_accuracy.csv"
+
         if os.path.exists(self.model_path):
             print(f"Loading model from {self.model_path}")
             # 这里传入 custom_objects
@@ -73,21 +80,43 @@ class BaseModel(ABC):
     def summary(self):
         self.model.summary()
 
-    def train(self, x_train, y_train, epochs=5, validation_split=0, batch_size=32):
-        save_callback = SaveEpochMetricsCallback(self.model_log_path)
-        self.model.fit(
-            x_train,
-            y_train,
-            epochs=epochs,
-            validation_split=validation_split,
-            batch_size=batch_size,
-            callbacks=[save_callback]
-        )
+    def train(self, x_train, y_train, x_test, y_test, epochs=5, batch_size=32):
+        best_test_accuracy = 0  # Variable to store the best test accuracy
+        best_test_accuracy_epoch = 0  # Variable to store the epoch when the best accuracy was achieved
 
-    import os
-    import pandas as pd
-    import numpy as np
-    from sklearn.metrics import accuracy_score
+        save_callback = SaveEpochMetricsCallback(self.test_loss_log_path, self.test_acc_log_path)
+
+        # Train the model for the specified number of epochs
+        for epoch in range(epochs):
+            print(f"Epoch {epoch + 1}/{epochs}")
+
+            # Train the model for one epoch
+            history = self.model.fit(
+                x_train,
+                y_train,
+                epochs=1,  # Train one epoch at a time
+                validation_data=(x_test, y_test),  # Use test data for validation
+                batch_size=batch_size,
+                callbacks=[save_callback],  # Pass the callback to handle logging
+                verbose=2  # Show training progress
+            )
+
+            # Get the test accuracy from the history object
+            test_accuracy = history.history.get('val_accuracy', [None])[0]
+
+            # Update the best test accuracy if the current epoch's test accuracy is better
+            if test_accuracy > best_test_accuracy:
+                best_test_accuracy = test_accuracy
+                best_test_accuracy_epoch = epoch + 1  # Store the epoch number
+
+                # Save the model with the best test accuracy
+                self.save()
+                print(f"Saved model at epoch {epoch + 1} with test accuracy: {test_accuracy:.4f}")
+
+            print(f"Test Accuracy for epoch {epoch + 1}: {test_accuracy:.4f}")
+
+        print(f"\nBest Test Accuracy: {best_test_accuracy:.4f} achieved at epoch {best_test_accuracy_epoch}")
+
 
     def evaluate(self, x_test, y_test, n_splits=10, save_path="result/acc.csv"):
         batch_size = len(x_test) // n_splits
