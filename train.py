@@ -23,10 +23,9 @@ def main():
     if not model.is_load:
         model.compile(
             loss="sparse_categorical_crossentropy",
-            optimizer="adam",
             metrics=["accuracy"]
         )
-        model.train(x_train, y_train, epochs=300, x_test=x_test, y_test=y_test)
+        model.train(x_train, y_train, epochs=20, x_test=x_test, y_test=y_test)
         # model.save()  # Save the trained model
 
     # Evaluate the model on the test set

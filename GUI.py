@@ -11,8 +11,8 @@ def main():
     x_train, x_test = imageNormalization(x_train, x_test, mean=0.1037, std=0.3081)
 
     # Convert the labels to one-hot encoding
-    y_train = tf.keras.utils.to_categorical(y_train, 10)  # 10 classes
-    y_test = tf.keras.utils.to_categorical(y_test, 10)    # 10 classes
+    # y_train = tf.keras.utils.to_categorical(y_train, 10)  # 10 classes
+    # y_test = tf.keras.utils.to_categorical(y_test, 10)    # 10 classes
 
     print("x_train shape:", x_train.shape)  # (60000, 28, 28, 1)
     print("x_test shape:", x_test.shape)    # (10000, 28, 28, 1)
@@ -29,10 +29,11 @@ def main():
 
     # If model is not loaded, compile and train it
     if not model.is_load:
-        model.train(x_train,y_train,epochs=20,batch_size=32)
-        model.save()  # Save the trained model
+        # model.train(x_train,y_train,epochs=20,batch_size=32)
+        model.train(x_train, y_train, epochs=20, x_test=x_test, y_test=y_test)
+        # model.save()  # Save the trained model
 
-    NDOCNNacc = model.evaluate(x_test,y_test,save_path=f"result/{model.label}_acc.csv")
+    # NDOCNNacc = model.evaluate(x_test,y_test,save_path=f"result/{model.label}_acc.csv")
 
     # ===================== Pygame Event Loop =====================
     draw_on = False  # Initialize draw_on variable before the loop

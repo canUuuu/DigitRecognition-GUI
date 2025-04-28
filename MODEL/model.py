@@ -21,6 +21,15 @@ class SaveEpochMetricsCallback(tf.keras.callbacks.Callback):
         self.test_loss_df = pd.DataFrame(columns=["epoch", "test_loss"])
         self.test_acc_df = pd.DataFrame(columns=["epoch", "test_accuracy"])
 
+        # Ensure the directory exists before saving the file
+        self._ensure_directory_exists()
+
+    def _ensure_directory_exists(self):
+        """Ensure that the directory for log files exists."""
+        log_dir = os.path.dirname(self.test_loss_log_path)
+        if log_dir and not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+
     def on_epoch_end(self, epoch, logs=None):
         # Get test metrics at the end of each epoch
         test_loss = logs.get('val_loss')
@@ -40,7 +49,8 @@ class SaveEpochMetricsCallback(tf.keras.callbacks.Callback):
         self.test_loss_df = pd.concat([self.test_loss_df, new_test_loss_row], ignore_index=True)
         self.test_acc_df = pd.concat([self.test_acc_df, new_test_acc_row], ignore_index=True)
 
-        # Save the updated DataFrames to CSV files
+    def on_train_end(self, logs=None):
+        # Save the final DataFrames to CSV files at the end of training
         self.test_loss_df.to_csv(self.test_loss_log_path, index=False)
         self.test_acc_df.to_csv(self.test_acc_log_path, index=False)
 
@@ -87,24 +97,19 @@ class BaseModel(ABC):
         save_callback = SaveEpochMetricsCallback(self.test_loss_log_path, self.test_acc_log_path)
 
         # Train the model for the specified number of epochs
+        history = self.model.fit(
+            x_train,
+            y_train,
+            epochs=epochs,  # Train for the entire number of epochs at once
+            validation_data=(x_test, y_test),  # Use test data for validation
+            batch_size=batch_size,
+            callbacks=[save_callback],  # Pass the callback to handle logging
+            verbose=2  # Show training progress
+        )
+
+        # Get the test accuracy from the history object and check for the best test accuracy
         for epoch in range(epochs):
-            print(f"Epoch {epoch + 1}/{epochs}")
-
-            # Train the model for one epoch
-            history = self.model.fit(
-                x_train,
-                y_train,
-                epochs=1,  # Train one epoch at a time
-                validation_data=(x_test, y_test),  # Use test data for validation
-                batch_size=batch_size,
-                callbacks=[save_callback],  # Pass the callback to handle logging
-                verbose=2  # Show training progress
-            )
-
-            # Get the test accuracy from the history object
-            test_accuracy = history.history.get('val_accuracy', [None])[0]
-
-            # Update the best test accuracy if the current epoch's test accuracy is better
+            test_accuracy = history.history.get('val_accuracy')[epoch]
             if test_accuracy > best_test_accuracy:
                 best_test_accuracy = test_accuracy
                 best_test_accuracy_epoch = epoch + 1  # Store the epoch number
@@ -113,10 +118,7 @@ class BaseModel(ABC):
                 self.save()
                 print(f"Saved model at epoch {epoch + 1} with test accuracy: {test_accuracy:.4f}")
 
-            print(f"Test Accuracy for epoch {epoch + 1}: {test_accuracy:.4f}")
-
         print(f"\nBest Test Accuracy: {best_test_accuracy:.4f} achieved at epoch {best_test_accuracy_epoch}")
-
 
     def evaluate(self, x_test, y_test, n_splits=10, save_path="result/acc.csv"):
         batch_size = len(x_test) // n_splits
@@ -166,18 +168,17 @@ class CNNModel(BaseModel):
     def __init__(self, input_shape, model_path=None):
         super().__init__(input_shape, model_path)
 
-    def compile(self, learning_rate=0.001):
+    def compile(self, loss="sparse_categorical_crossentropy", learning_rate=0.001, metrics=["accuracy"]):
         """
-        Override compile to use categorical_crossentropy for one-hot encoded labels.
+        Override compile to call the parent class's compile method, ensuring correct model compilation.
 
+        :param loss: Loss function to use.
         :param learning_rate: Learning rate for the Adam optimizer.
+        :param metrics: List of metrics to evaluate during training.
         """
-        optimizer = Adam(learning_rate=learning_rate)
-        self.model.compile(
-            loss="categorical_crossentropy",  # 注意这里用的是 categorical_crossentropy
-            optimizer=optimizer,
-            metrics=["accuracy"]
-        )
+        # Call the parent class's compile method to handle model compilation
+        # 强制使用"sparse_categorical_crossentropy"
+        super(CNNModel, self).compile(loss="sparse_categorical_crossentropy", learning_rate=learning_rate, metrics=metrics)
 
     def build_model(self, input_shape):
         inputs = tf.keras.Input(shape=input_shape)

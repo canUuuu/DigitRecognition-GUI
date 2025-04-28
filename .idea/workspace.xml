@@ -4,83 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="864f803e-faba-4351-b45a-a1236c3dfa00" name="更改" comment="添加了mnist数据集并解压">
+    <list default="true" id="864f803e-faba-4351-b45a-a1236c3dfa00" name="更改" comment="重新写train">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ASSETS/Fig.png" beforeDir="false" afterPath="$PROJECT_DIR$/ASSETS/Fig.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ASSETS/out.png" beforeDir="false" afterPath="$PROJECT_DIR$/ASSETS/out.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/CMakeLists.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/DeviceInfo.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/EnsembleData.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/EnsembleFind.sln" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/EnsembleFind.vcxproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/Misc.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/OutputData.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/OutputMarshaller.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/OutputRecord.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/Outputter.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/ProcessData.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/ThreadSafeQueue.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/kernels.cu" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/kernels.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/main.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/main.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/C++/type_defs.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MODEL/cnn_model.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUI.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MODEL/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/MODEL/model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/t10k-images-idx3-ubyte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/t10k-labels-idx1-ubyte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/train-images-idx3-ubyte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/train-labels-idx1-ubyte" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/unzip.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/20250426102942/events.out.tfevents.1745634582.MACBOOK.6176.0.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/20250427164000/events.out.tfevents.1745743201.MACBOOK.42012.0.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/20250427164322/events.out.tfevents.1745743403.MACBOOK.23672.0.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/20250427165933/events.out.tfevents.1745744374.MACBOOK.15928.0.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/20250427170548/events.out.tfevents.1745744750.MACBOOK.41924.0.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/20250427170641/events.out.tfevents.1745744801.MACBOOK.45356.0.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/20250427170752/events.out.tfevents.1745744872.MACBOOK.34956.0.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/20250427170959/events.out.tfevents.1745744999.MACBOOK.16360.0.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/20250427171038/events.out.tfevents.1745745038.MACBOOK.2936.0.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/20250427171201/events.out.tfevents.1745745121.MACBOOK.39172.0.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/20250427171256/events.out.tfevents.1745745176.MACBOOK.3232.0.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/20250427172548/events.out.tfevents.1745745949.MACBOOK.41620.0.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/constructs/ema_weights.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/constructs/learning_rate.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/constructs/loggable.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/constructs/loops.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/constructs/loss.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/constructs/metrics.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/constructs/optimizer.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/constructs/output.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/etc/count_vars.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/etc/ensemble_evaluations.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/etc/extract_final_branch_weights.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/etc/extract_scalars_from_logs.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/etc/extract_smallNORB_training_samples.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/etc/plot_final_branch_weights.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/etc/produce_MNIST_eval_digits.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/etc/segregate_weight_types.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/input/MNIST_input_pipeline.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/input/cifar100_input_pipeline.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/input/cifar10_input_pipeline.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/input/cifar_input_pipeline.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/input/input_pipeline_base.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/input/smallNORB_input_pipeline.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/models/SmallImageBranchingMerging.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/models/nn_ops.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/models/variable.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/perturbations.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/reconstruct.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/run_experiments.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/train.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/CapsuleModel_acc.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/CapsuleModel_epoch_loss_summary.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/LeNet-5_acc.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/NDOCNN_acc.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/cnn_acc.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/cnn_epoch_loss_summary.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/cnn_model_acc.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/cnn_model_epoch_loss_summary.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -141,7 +70,7 @@
       <recent name="D:\app\pycharm\python project\DigitRecognition\MODEL" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.train">
+  <component name="RunManager" selected="Python.GUI">
     <configuration name="GUI" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DigitRecognition" />
       <option name="ENV_FILES" value="" />
@@ -518,7 +447,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745746319522</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="重新写train">
+      <option name="closed" value="true" />
+      <created>1745812945954</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1745812945954</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -533,7 +470,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="save model to MODEL" />
     <MESSAGE value="修改了GUI的process_image 增加到utilis中" />
     <MESSAGE value="修改了GUI的app 增加到utilis中" />
     <MESSAGE value="增加了GUI文件生成图形界面" />
@@ -558,6 +494,7 @@
     <MESSAGE value="修改了train的启动路径, python目录放在项目根目录" />
     <MESSAGE value="问题在train中应该选择mnist数据集 不是那个mat文件的smallNORB 数据集" />
     <MESSAGE value="添加了mnist数据集并解压" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加了mnist数据集并解压" />
+    <MESSAGE value="重新写train" />
+    <option name="LAST_COMMIT_MESSAGE" value="重新写train" />
   </component>
 </project>
