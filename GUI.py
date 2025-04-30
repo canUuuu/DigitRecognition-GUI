@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 from utils import *
 import tensorflow as tf
 from MODEL.model import *
@@ -6,12 +8,14 @@ def main():
     # Load the MNIST dataset from local Keras storage
     mnist = tf.keras.datasets.mnist
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
+    # plt.imshow(x_train[3],cmap = plt.cm.gray)
+    # plt.show()
 
     # Normalize and reshape the images to [num_samples, 28, 28, 1]
     x_train, x_test = imageNormalization(x_train, x_test, mean=0.1037, std=0.3081)
     # Resize 到 32×32 for LeNet-5
-    x_train = tf.image.resize(x_train, [32, 32]).numpy()
-    x_test = tf.image.resize(x_test, [32, 32]).numpy()
+    # x_train = tf.image.resize(x_train, [32, 32]).numpy()
+    # x_test = tf.image.resize(x_test, [32, 32]).numpy()
     # Convert the labels to one-hot encoding　only　caps　need
     # y_train = tf.keras.utils.to_categorical(y_train, 10)  # 10 classes
     # y_test = tf.keras.utils.to_categorical(y_test, 10)    # 10 classes
@@ -26,7 +30,7 @@ def main():
 
     # Initialize the CNN model with input shape and model path
     # model = CNNModel(x_train.shape[1:], model_path=model_path)
-    model = LeNet5(x_train.shape[1:])
+    model = CNNModel(x_train.shape[1:])
     model.summary()
 
     # If model is not loaded, compile and train it

@@ -1,6 +1,7 @@
 from MODEL.model import *
 from utils import *
 import tensorflow as tf
+from MODEL.capslayer import *
 
 # ===================== Preparation =====================
 # Load the MNIST dataset from local keras storage
@@ -9,6 +10,8 @@ mnist = tf.keras.datasets.mnist
 
 # Normalize and reshape the images to [num_samples, 28, 28, 1]
 x_train, x_test = imageNormalization(x_train, x_test, mean=0.1037, std=0.3081)
+y_train = tf.keras.utils.to_categorical(y_train, 10)  # 10 classes
+y_test = tf.keras.utils.to_categorical(y_test, 10)    # 10 classes
 # ===================== Preparation =====================
 
 def main():

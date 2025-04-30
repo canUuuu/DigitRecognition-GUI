@@ -156,3 +156,5 @@ top1: 0.9974899291992188
 ff[^1]
 
 [^1]: dfadf
+
+$P(C|X)=\arg\max_{i}\left\| Cap_i \right\|$
