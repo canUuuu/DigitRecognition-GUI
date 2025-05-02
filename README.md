@@ -9,7 +9,7 @@ This is a handwritten digit recognition project with a GUI, divided into two mod
 
 this is the workflow and what I did.
 
-![image-20250502102820851](C:\Users\29192\AppData\Roaming\Typora\typora-user-images\image-20250502102820851.png)
+![workflow](D:\app\pycharm\python project\DigitRecognition\ASSETS\workflow.png)
 
 the key structure of the work:
 
