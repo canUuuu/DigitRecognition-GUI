@@ -9,7 +9,7 @@ This is a handwritten digit recognition project with a GUI, divided into two mod
 
 this is the workflow and what I did.
 
-![workflow](D:\app\pycharm\python project\DigitRecognition\ASSETS\workflow.png)
+![workflow](https://github.com/canUuuu/DigitRecognition-GUI/blob/master/ASSETS/workflow.png)
 
 the key structure of the work:
 
@@ -111,9 +111,9 @@ model = BMCNNwHFCs(ckpt_path)
 
 These figures show the loss convergence and accuracy values of four models.
 
-![epoch-loss](D:\qi\paper\assignments\大二课设\result\epoch-loss.png)
+![epoch-loss](https://github.com/canUuuu/DigitRecognition-GUI/blob/master/ASSETS/epoch-loss.png)
 
-![acc](D:\qi\paper\assignments\大二课设\result\acc.png)
+![acc](https://github.com/canUuuu/DigitRecognition-GUI/blob/master/ASSETS/acc.png)
 
 ## Bibliography
 
