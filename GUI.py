@@ -13,23 +13,26 @@ def main():
 
     # Normalize and reshape the images to [num_samples, 28, 28, 1]
     x_train, x_test = imageNormalization(x_train, x_test, mean=0.1037, std=0.3081)
-    # Resize 到 32×32 for LeNet-5
+    # ===================== Train / Load Model =====================
+    # LeNet-5
+    # Resize to 32×32 for LeNet-5
     # x_train = tf.image.resize(x_train, [32, 32]).numpy()
     # x_test = tf.image.resize(x_test, [32, 32]).numpy()
+    # LeNet-5
+
+    # CapsNet
     # Convert the labels to one-hot encoding　only　caps　need
     # y_train = tf.keras.utils.to_categorical(y_train, 10)  # 10 classes
     # y_test = tf.keras.utils.to_categorical(y_test, 10)    # 10 classes
+    # print("x_train shape:", x_train.shape)  # (60000, 28, 28, 1)
+    # print("x_test shape:", x_test.shape)    # (10000, 28, 28, 1)
+    # print("y_train shape:", y_train.shape)  # (60000, 10)
+    # print("y_test shape:", y_test.shape)    # (10000, 10)
+    # CapsNet
 
-    print("x_train shape:", x_train.shape)  # (60000, 28, 28, 1)
-    print("x_test shape:", x_test.shape)    # (10000, 28, 28, 1)
-    print("y_train shape:", y_train.shape)  # (60000, 10)
-    print("y_test shape:", y_test.shape)    # (10000, 10)
-
-    # ===================== Train / Load Model =====================
+    '''cnn_model'''
     # model_path = "MODEL/cnn_model.h5"
-
-    # Initialize the CNN model with input shape and model path
-    # model = CNNModel(x_train.shape[1:], model_path=model_path)
+    # Initialize the NDOCNN model with input shape and model path
     model = CNNModel(x_train.shape[1:])
     model.summary()
 
@@ -39,7 +42,10 @@ def main():
         model.train(x_train, y_train, epochs=100, x_test=x_test, y_test=y_test)
         # model.save()  # Save the trained model
 
-    # NDOCNNacc = model.evaluate(x_test,y_test,save_path=f"result/{model.label}_acc.csv")
+
+    # BMCNNwHFCs
+    # ckpt_path = './MODEL/logs/20250428134519/best_top1-77'
+    # model = BMCNNwHFCs(ckpt_path)
 
     # ===================== Pygame Event Loop =====================
     draw_on = False  # Initialize draw_on variable before the loop

@@ -9,7 +9,10 @@ import pandas as pd
 from sklearn.metrics import accuracy_score
 from abc import ABC, abstractmethod
 from MODEL.capslayer import CapsLayer
-
+from python.constructs.optimizer import Adam
+from python.input.MNIST_input_pipeline import MNIST
+from python.models.SmallImageBranchingMerging import SmallImageBranchingMerging
+from python.constructs.learning_rate import ManualExponentialDecay
 
 class SaveEpochMetricsCallback(tf.keras.callbacks.Callback):
     def __init__(self, test_loss_log_path, test_acc_log_path):
@@ -301,4 +304,46 @@ class CapsuleModel(BaseModel):
         return scale * x
 
 
+class BMCNNwHFCs:
+    label = "BMCNNwHFCs"
+    def __init__(self, ckpt_path='./MODEL/logs/20250428134519/best_top1-77'):
+        # Step 1: 准备 input pipeline
+        self.in_pipe = MNIST(
+            data_base_dir="D:/app/pycharm/python project/DigitRecognition/data",
+            augment_training_data=True,
+            augmentation_type=1
+        )
 
+        # Step 2: 初始化模型
+        self.model = SmallImageBranchingMerging(
+            count_classes=self.in_pipe.get_class_count(),
+            image_size=self.in_pipe.get_image_size(),
+            image_channels=self.in_pipe.get_image_channels(),
+            merge_strategy=2,
+            use_hvcs=True,
+            hvc_type=2,
+            initial_filters=32,
+            filter_growth=16,
+            hvc_dims=[96, 144, 192],
+            total_convolutions=11,
+            branches_after=[4, 7, 10],
+            reconstruct_from_hvcs=False
+        )
+
+        # Step 3: 学习率和优化器
+        lr = ManualExponentialDecay(initial_learning_rate=0.001, decay_rate=0.98, minimum_lr=1e-7)
+        self.optimizer = Adam(lr)
+
+        # Step 4: checkpoint 恢复器
+        self.ckpt = tf.train.Checkpoint(
+            vars=self.model.get_all_savable_variables(),
+            optimizer=self.optimizer
+        )
+
+        self.ckpt.restore(ckpt_path).expect_partial()
+        print("✅ Successfully restored model variables and optimizer from:", ckpt_path)
+
+    def predict_digit(self, img):
+        test_image = img.reshape(-1, 28, 28, 1)
+        logits, _ = self.model.forward(features=img, labels=None, is_training=False)
+        return logits
